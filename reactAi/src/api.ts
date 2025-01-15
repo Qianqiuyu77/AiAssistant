@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { ChatInfo } from './types/chat';
 
 const host = 'http://localhost:5000'
 
@@ -30,7 +31,7 @@ export async function register(userName: string, passWord: string) {
     }
 }
 
-export async function getAllChat(userId: string) {
+export async function getAllChat(userId: number):Promise<ChatInfo[]> {
     try {
         const res = await axios.get(`${host}/getAllChat`, {
             params: {
@@ -39,11 +40,12 @@ export async function getAllChat(userId: string) {
         });
         return res.data;
     } catch (err) {
-        return err;
+        console.log(err);
+        throw new Error("Failed to fetch chat info");
     }
 }
 
-export async function getChat(question: string, userId: string, conversationId?: number) {
+export async function getChat(question: string, userId: number, conversationId?: number) {
     try {
         const res = await axios.post(`${host}/chat`, (
             {

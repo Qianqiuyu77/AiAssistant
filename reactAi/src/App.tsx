@@ -1,56 +1,25 @@
-// import { useState } from 'react'
-import { useEffect } from 'react'
 import './App.css'
-import { login, getAllChat, getChat } from './api'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
+import Home from './pages/Home/home';
+import Login from './pages/Login/login';
 
 function App() {
-  async function fetchLogin() {
-    try {
-      const res = await login('Qianqiu', 'Xwc03420');
-      console.log(res);
-      return res.userId;
-    } catch (err) {
-      console.error(err);
-    }
-  }
-
-  async function fetchGetAllChatInfos(userId: string) {
-    try {
-      const res = await getAllChat(userId);
-      console.log(res);
-      return res;
-    }catch (err) {
-      console.error(err);
-    }
-  }
-
-  async function fetchGetChat(question: string, userId: string, conversationId?: number) {
-    try {
-      const res = await getChat(question, userId, conversationId);
-      console.log(res);
-      return res;
-    }catch (err) {
-      console.error(err);
-    }
-  }
-
-  async function getChatInfos() {
-    const userId = await  fetchLogin();
-    console.log(userId);
-    const res = await fetchGetAllChatInfos(userId);
-    console.log(res.chatInfo);
-    return res;
-  }
-
-  useEffect(() => {
-    getChatInfos();
-    fetchGetChat('你好,请告诉我计算机硬件有哪些？', '1112', 8);
-  }, []);
 
   return (
-    <>
-    </>
-  )
-}
+    <Router>
+      <div>
+
+        {/* 路由配置 */}
+        <Routes>
+          <Route path="/Home" element={<Home />} />
+          <Route path="/Login" element={<Login />} />
+          <Route path="/" element={<Login />} />
+          <Route path="*" element={<Login />} />
+        </Routes>
+      </div>
+    </Router>
+  );
+};
 
 export default App
