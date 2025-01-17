@@ -39,11 +39,21 @@ const Home = () => {
     const showNotification = (infoMsg: string) => {
         api.info({
             message: infoMsg,
-            description: <div>Hello, {infoMsg}!</div>, // 使用从 Context 获取的值
+            description: <div>Hello, {infoMsg}!</div>,
             placement: 'topRight',
             icon: <FrownOutlined style={{ color: '#108ee9' }} />,
         });
     };
+
+    const getChatInfos = async () => {
+        try {
+            const res = await fetchGetAllChatInfos(baseState.userId);
+            setChatInfos(res);
+        } catch (err) {
+            console.error(err);
+            showNotification('获取聊天记录失败');
+        }
+    }
 
     // 使用副作用处理登录逻辑
     useEffect(() => {
@@ -57,19 +67,8 @@ const Home = () => {
 
     // 获取聊天记录的副作用
     useEffect(() => {
-        async function getChatInfos(userId: number) {
-            try {
-                const res = await fetchGetAllChatInfos(userId);
-                setChatInfos(res);
-
-            } catch (err) {
-                console.error(err);
-                showNotification('获取聊天记录失败');
-            }
-        }
-
         if (baseState.userId !== 0) {
-            getChatInfos(baseState.userId);
+            getChatInfos();
         }
     }, [baseState.userId]);
 
@@ -78,6 +77,8 @@ const Home = () => {
             {contextHolder}
             <App
                 chatInfos={chatInfos}
+                showNotification={showNotification}
+                getChatInfos={getChatInfos}
             />
         </>
     );

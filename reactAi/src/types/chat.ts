@@ -1,13 +1,32 @@
 export interface ChatInfo {
     conversationId: number
-    conversationInfo: ConversationInfo
+    conversationInfo: ConversationInfo[]
+    conversationMsg: string
 
 }
 
 export interface ConversationInfo {
     content: string
-    createdAt: number
+    createdAt?: number
     knowledge: string
-    messageId : number
+    messageId: number
     question: string
+}
+
+export interface ChatAnswer {
+    answer: string
+    conversationId: number
+    knowledge: string
+    messageId: number
+}
+
+export enum ChatState {
+    FREE = 0,
+    BUSY = 1
+}
+
+export const defaultChatInfo: ChatInfo = {
+    conversationId: 0,
+    conversationInfo: [],
+    conversationMsg: ''
 }

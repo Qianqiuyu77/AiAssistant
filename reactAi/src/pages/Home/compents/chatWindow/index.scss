@@ -1,0 +1,136 @@
+@keyframes dots {
+    0% {
+      content: "";
+    }
+    33% {
+      content: ".";
+    }
+    66% {
+      content: "..";
+    }
+    100% {
+      content: "...";
+    }
+  }
+
+.chatWindowContainer{
+    position: relative;
+    margin: auto;
+    width: 60%;
+    height: 100%;
+    margin-left: 13rem;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    white-space: pre-wrap;
+
+    .chatMessageContainer{
+        width: 100%;
+        height: 90%;
+        // background-color: red;
+        overflow-y: scroll;
+        scroll-behavior: smooth;
+        ::-webkit-scrollbar {
+            display: none;
+        }
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+        .chatMessage{
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding-bottom: 1rem;
+            .chatQuestionContainer{
+                width: 100%;
+                display: flex;
+                justify-content: flex-end;
+                margin-bottom: 2rem;
+                margin-top: 3rem;
+                .chatQuestion{
+                    line-height: 2rem;
+                    background-color: #f4f5fa;
+                    padding: 1rem;
+                    border-radius: 0.5rem;
+                }
+            }
+            .chatAnswerContainer{
+                
+                width: 100%;
+                display: flex;
+                justify-content: flex-start;
+                align-items: flex-start;
+                line-height: 2rem;
+                .chatAnswer{
+                    padding: 1rem;
+                    border-radius: 0.5rem;
+                }
+                .chatLoding{
+                    margin-top: 0.8rem;
+                    margin-left: 1rem;
+                }
+            }
+            .chatKnowledgeContainer{
+                color: #fff;
+                width: 90%;
+                display: flex;
+                justify-content: flex-start;
+                align-items: flex-start;
+            }
+
+        }
+        
+    }
+    .chatInputContainer{
+        position: relative;
+        width: 100%;
+        height: 3.5rem;
+        border-radius: 5rem;
+        display: flex;
+        align-items: center;
+        justify-content:space-around;
+        background-color: #f3f3f3;
+        .paperClipIcon{
+            margin-left: 0.5rem;
+        }
+        .selectUseGAG{
+            position: absolute;
+            width: 5rem;
+            height: 2.5rem;
+            top: -2.5rem;
+            right: 2rem;
+            color: #fff;
+            background-color: #5d65f8;
+            border: 1px solid #5d65f8;
+            border-bottom: none;
+            border-top-left-radius: 0.5rem;
+            border-top-right-radius: 0.5rem;
+        }
+        .chatInput{
+            font-size: 1rem;
+            width: 70%;
+            height: 100%;
+            border: none;
+            outline: none;
+            padding-left: 1rem;
+            background-color: #f3f3f3;
+        }
+        .sendButtonContainer{
+            background-color: #5d65f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            margin-left: 1rem;
+            .sendButton{
+                width: 1.2rem;
+                height: 1.2rem;
+            }
+        }
+
+    }
+
+}
