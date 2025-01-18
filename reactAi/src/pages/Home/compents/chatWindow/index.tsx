@@ -10,7 +10,6 @@ import { CaretRightOutlined } from '@ant-design/icons';
 import type { CollapseProps } from 'antd';
 import { Collapse, theme } from 'antd';
 import { bus } from "../../../../bus";
-import { getTokenNumber } from "../../../../utils";
 
 interface ChatWindowProps {
     chatInfo: ChatInfo;
