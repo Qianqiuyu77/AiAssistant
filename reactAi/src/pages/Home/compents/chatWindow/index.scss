@@ -48,7 +48,12 @@
                 justify-content: flex-end;
                 margin-bottom: 2rem;
                 margin-top: 3rem;
-                .chatQuestion{
+                .chatQuestion {
+                    max-width: 25rem; /* 限制最大宽度 */
+                    word-wrap: break-word; /* 单词长时强制断行 */
+                    word-break: break-word; /* 兼容处理 */
+                    overflow-wrap: break-word; /* 兼容更广泛场景 */
+                    white-space: normal; /* 允许文本自动换行 */
                     line-height: 2rem;
                     background-color: #f4f5fa;
                     padding: 1rem;
@@ -131,6 +136,20 @@
             }
         }
 
+    }
+    .chatTips{
+        position: relative;
+        width: 100%;
+        // background-color: red;
+        text-align: center;
+        font-size: 0.8rem;
+        line-height: 1.6rem;
+        color: #9d9ebe;
+        .chatTokens{
+            position: absolute;
+            right: 0.5rem;
+            top: 0;
+        }
     }
 
 }

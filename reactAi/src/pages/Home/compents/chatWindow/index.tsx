@@ -10,6 +10,7 @@ import { CaretRightOutlined } from '@ant-design/icons';
 import type { CollapseProps } from 'antd';
 import { Collapse, theme } from 'antd';
 import { bus } from "../../../../bus";
+import { getTokenNumber } from "../../../../utils";
 
 interface ChatWindowProps {
     chatInfo: ChatInfo;
@@ -19,6 +20,7 @@ interface ChatWindowProps {
     openHistoryConversation: (conversationId: number) => void;
 }
 
+const LIMIT_INPUT = 300;
 
 const ChatWindow = (chatWindowProps: ChatWindowProps) => {
     const baseState = useBaseStore();
@@ -34,6 +36,7 @@ const ChatWindow = (chatWindowProps: ChatWindowProps) => {
     const latestMessageRef = useRef<HTMLDivElement | null>(null);
 
     const handleInputChange = (event: { target: { value: SetStateAction<string> } }) => {
+
         setInputValue(event.target.value);
     };
 
@@ -197,6 +200,7 @@ const ChatWindow = (chatWindowProps: ChatWindowProps) => {
                     type="text"
                     placeholder="请输入问题"
                     value={inputValue} // 绑定状态
+                    maxLength={LIMIT_INPUT}
                     onChange={handleInputChange} // 监听输入变化
                     onKeyDown={(event) => {
                         if (event.key === "Enter") {
@@ -224,6 +228,12 @@ const ChatWindow = (chatWindowProps: ChatWindowProps) => {
                     />
                 </div>
 
+            </div>
+            <div className="chatTips">
+                内容由AI生成，无法确保真实准确，仅供参考学习
+                <div className="chatTokens">
+                    Length:  {inputValue.length} / {LIMIT_INPUT}
+                </div>
             </div>
         </div>
     );

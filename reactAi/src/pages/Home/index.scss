@@ -4,9 +4,63 @@
     background-color: #ececf6;
     display: flex;
     flex-direction: column;
+    font-family: "Noto Serif SC", serif;
+    font-optical-sizing: auto;
+    font-style: normal;
     .topBar{
-        width: 100%;
+        width: 99%;
         height: 5rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .logo{
+            display: flex;
+            align-items: center;
+            padding-left: 1rem;
+            .topIcon{
+                width: 2rem;
+                height: 1.5rem;
+            }
+            .topTitle{
+                font-size: 1.5rem;
+                font-weight: 100;
+                margin-left: 1rem;
+                font-family: "ZCOOL XiaoWei", serif;
+            }
+        }
+        .functionalBar{
+            display: flex;
+            align-items: center;
+            width: 18rem;
+            justify-content:space-between;
+            .feedBack{
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                img{
+                    height: 1rem;
+                    margin-right: 0.3rem;
+                }
+            }
+            .functionalIcon{
+                width: 1.5rem;
+                height: 1.5rem;
+                cursor: pointer;
+            }
+            .userIcon{
+                width: 2rem;
+                height: 2rem;
+                color: #fff;
+                font-size: 0.9rem;
+                background-color: #5d65f8;
+                text-align: center;
+                line-height: 2rem;
+                border-radius: 50%;
+            }
+            .split{
+                font-size: 0.8rem;
+            }
+        }
 
     }
     .mainContent{
@@ -16,6 +70,31 @@
         .siderBar{
             width: 6%;
             height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            .newKnowledgeBaseButton{
+                cursor: pointer;
+                margin-top: 1rem;
+                width: 100%;
+                // background-color: red;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                // width: 2.5rem;
+                // height: 2.5rem;
+                img{
+                    width: 1.8rem;
+                    height: 1.8rem;
+                }
+                .newKnowledgeText{
+                    margin-top: 0.5rem;
+                    font-size: 0.8rem;
+                    font-weight: 700;
+                }
+            }
         }
         .chatBox{
             width: 93%;

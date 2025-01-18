@@ -14,9 +14,11 @@
     "antd": "^5.23.1",
     "axios": "^1.7.9",
     "eventemitter3": "^5.0.1",
+    "gpt-3-encoder": "^1.1.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "6",
+    "tiktoken": "^1.0.18",
     "zustand": "^5.0.3"
   },
   "devDependencies": {

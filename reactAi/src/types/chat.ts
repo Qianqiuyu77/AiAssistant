@@ -30,3 +30,11 @@ export const defaultChatInfo: ChatInfo = {
     conversationInfo: [],
     conversationMsg: ''
 }
+
+export interface KnowledgeBase {
+    knowledgeBaseId: number
+    knowledgeBaseName: string
+    knowledgeBaseDescription: string
+    knowledgeIcon: string
+
+}
