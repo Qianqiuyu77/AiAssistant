@@ -26,16 +26,19 @@ const ChatWindow = (chatWindowProps: ChatWindowProps) => {
 
     const { chatInfo, fetchGetAnswer, currentCid, getChatInfos, openHistoryConversation } = chatWindowProps;
 
-    const [inputValue, setInputValue] = useState("");
+    const [inputValue, setInputValue] = useState<string>("");
 
-    const [isSending, setIsSending] = useState(false); // 防连点标志位
+    const [isSending, setIsSending] = useState<boolean>(false); // 防连点标志位
 
-    const [canUseRAG, setCanUseRAG] = useState(1);
+    const [canUseRAG, setCanUseRAG] = useState<number>(1);
+
+    const [canScrollBottom, setCanScrollBottom] = useState<boolean>(false);
 
     const latestMessageRef = useRef<HTMLDivElement | null>(null);
 
-    const handleInputChange = (event: { target: { value: SetStateAction<string> } }) => {
 
+
+    const handleInputChange = (event: { target: { value: SetStateAction<string> } }) => {
         setInputValue(event.target.value);
     };
 
@@ -111,6 +114,10 @@ const ChatWindow = (chatWindowProps: ChatWindowProps) => {
         }, 500);
     };
 
+    const scrollToBottom = () => {
+        latestMessageRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+
 
     const getItems: (panelStyle: CSSProperties, knowledge: string) => CollapseProps['items'] = (panelStyle, knowledge) => [
         {
@@ -140,6 +147,19 @@ const ChatWindow = (chatWindowProps: ChatWindowProps) => {
         border: 'none',
     };
 
+    const isInView = (element: HTMLDivElement | null) => {
+        if (!element) return false; // 确保元素存在
+        const rect = element.getBoundingClientRect();
+
+        const isInView =
+            rect.top >= 0 && // 元素的顶部在视口范围内
+            rect.left >= 0 && // 元素的左边在视口范围内
+            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) && // 元素的底部在视口范围内
+            rect.right <= (window.innerWidth || document.documentElement.clientWidth) // 元素的右边在视口范围内
+        return !isInView;
+    };
+
+
     useEffect(() => {
         bus.on("resetInput", resetInput);
         return () => {
@@ -147,9 +167,36 @@ const ChatWindow = (chatWindowProps: ChatWindowProps) => {
         };
     }, []);
 
+    // 滑动时计算是否可以滚动到底部
+    useEffect(() => {
+        const scrollContainer = document.querySelector("#chatMessageContainer"); // 替换为你的滚动容器
+        const handleScroll = () => {
+            if (latestMessageRef.current) {
+                setCanScrollBottom(isInView(latestMessageRef.current))
+            }
+        };
+
+        if (scrollContainer) {
+            scrollContainer.addEventListener("scroll", handleScroll);
+        }
+
+        return () => {
+            if (scrollContainer) {
+                scrollContainer.removeEventListener("scroll", handleScroll);
+            }
+        };
+    }, []);
+
+    // 每次切换对话重新计算是否可以滚动到底部
+    useEffect(() => {
+        if (latestMessageRef.current) {
+            setCanScrollBottom(isInView(latestMessageRef.current))
+        }
+    }, [currentCid])
+
     return (
         <div className="chatWindowContainer">
-            <div className="chatMessageContainer">
+            <div className="chatMessageContainer" id="chatMessageContainer">
                 {chatInfo?.conversationInfo?.map((item, index) => {
                     const isLastMessage = index === chatInfo.conversationInfo.length - 1;
                     return (
@@ -188,9 +235,19 @@ const ChatWindow = (chatWindowProps: ChatWindowProps) => {
                         </div>
                     );
                 })}
-                <div ref={latestMessageRef} />
+                {
+                    <div ref={latestMessageRef} />
+                }
             </div>
             <div className="chatInputContainer">
+                {
+                    canScrollBottom && <div
+                        className="scrollToBottom"
+                        onClick={() => scrollToBottom()}
+                    >
+                        <img src="src/images/下.png" alt="" />
+                    </div>
+                }
                 <PaperClipOutlined
                     className="paperClipIcon"
                 />

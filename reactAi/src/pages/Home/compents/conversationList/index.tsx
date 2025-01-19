@@ -1,6 +1,7 @@
 import { PlusOutlined } from "@ant-design/icons"
 import { ChatInfo } from "../../../../types/chat"
 import './index.scss'
+import { Dropdown, MenuProps } from "antd"
 
 interface ConversationListProps {
     chatInfos: ChatInfo[]
@@ -16,6 +17,42 @@ const ConversationList = (conversationListProps: ConversationListProps) => {
         openHistoryConversation,
         openNewConversation
     } = conversationListProps
+
+
+    const items: MenuProps['items'] = [
+        {
+            label: (
+                <div className="menu-item">
+                    <img src="src/images/分享.png" alt="" />
+                    共享
+                </div>
+            ),
+            key: '0',
+        },
+        {
+            label: (
+                <div className="menu-item">
+                    <img src="src/images/重命名.png" alt="" />
+                    重命名
+                </div>
+            ),
+            key: '1',
+        },
+        {
+            label: (
+                <div
+                    className="menu-item"
+                    style={{
+                        color: '#f93a37'
+                    }}
+                >
+                    <img src="src/images/删除.png" alt="" />
+                    删除
+                </div>
+            ),
+            key: '3',
+        },
+    ];
 
     return (
         <div className="conversationList">
@@ -38,6 +75,15 @@ const ConversationList = (conversationListProps: ConversationListProps) => {
                             key={chatInfo.conversationId}
                             onClick={() => openHistoryConversation(chatInfo.conversationId)}>
                             {chatInfo.conversationMsg.substring(0, 8)}
+                            {
+
+                                currentCid === chatInfo.conversationId
+                                && <Dropdown menu={{ items }} trigger={['click']}>
+                                    <img src="src/images/白省略.png" />
+                                </Dropdown>
+
+
+                            }
                         </div>
                     )
                 })

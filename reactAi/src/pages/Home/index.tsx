@@ -10,6 +10,7 @@ import SiderBar from "./compents/siderBar";
 
 interface HomeProps {
     chatInfos: ChatInfo[];
+    userName: string;
     showNotification: (message: string) => void;
     getChatInfos: () => void;
 }
@@ -104,7 +105,7 @@ const knowledgeBaseList: KnowledgeBase[] = [
 
 const App = (homeProps: HomeProps) => {
 
-    const { chatInfos = [], showNotification, getChatInfos } = homeProps;
+    const { chatInfos = [], userName = '', showNotification, getChatInfos } = homeProps;
 
     const baseState = useBaseStore();
 
@@ -188,7 +189,7 @@ const App = (homeProps: HomeProps) => {
                         className="functionalIcon"
                     />
                     <div className="userIcon functionalIcon">
-                        谢
+                        {userName.slice(0, 1)}
                     </div>
                 </div>
             </div>

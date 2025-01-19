@@ -96,6 +96,25 @@
         align-items: center;
         justify-content:space-around;
         background-color: #f3f3f3;
+        .scrollToBottom{
+            width: 2rem;
+            height: 2rem;
+            background-color: #fff;
+            border: 1px solid #e7e7e7;
+            border-radius: 50%;
+            position: absolute;
+            top: -3.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            img{
+                width: 80%;
+                height: 80%;
+            }
+        }
         .paperClipIcon{
             margin-left: 0.5rem;
         }

@@ -10,6 +10,7 @@ import { FrownOutlined } from '@ant-design/icons';
 const Home = () => {
     const baseState = useBaseStore();
     const [chatInfos, setChatInfos] = useState<ChatInfo[]>([]);
+    const [userName, setUserName] = useState<string>('');
 
     const [api, contextHolder] = notification.useNotification(); // Hook 放在组件的顶层
 
@@ -18,7 +19,7 @@ const Home = () => {
         try {
             const res = await login('Qianqiu', 'Xwc03420');
             console.log(res);
-            return res.userId;
+            return res;
         } catch (err) {
             console.error(err);
         }
@@ -58,8 +59,9 @@ const Home = () => {
     // 使用副作用处理登录逻辑
     useEffect(() => {
         async function getLogin() {
-            const userId = await fetchLogin();
+            const { userId, userName } = await fetchLogin();
             baseState.setUserId(userId);
+            setUserName(userName);
         }
 
         getLogin();
@@ -79,6 +81,7 @@ const Home = () => {
                 chatInfos={chatInfos}
                 showNotification={showNotification}
                 getChatInfos={getChatInfos}
+                userName={userName}
             />
         </>
     );
