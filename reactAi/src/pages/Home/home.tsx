@@ -5,7 +5,7 @@ import { notification } from 'antd';
 
 import { login, getAllChat } from '../../api';
 import { ChatInfo } from '../../types/chat';
-import { FrownOutlined } from '@ant-design/icons';
+import { FrownOutlined, SmileFilled } from '@ant-design/icons';
 
 const Home = () => {
     const baseState = useBaseStore();
@@ -37,13 +37,23 @@ const Home = () => {
     }
 
     // 通知显示函数
-    const showNotification = (infoMsg: string) => {
-        api.info({
-            message: infoMsg,
-            description: <div>Hello, {infoMsg}!</div>,
-            placement: 'topRight',
-            icon: <FrownOutlined style={{ color: '#108ee9' }} />,
-        });
+    const showNotification = (infoMsg: string, isSuccess = true) => {
+        if (isSuccess) {
+            api.success({
+                message: infoMsg,
+                description: <div>Hello, {infoMsg}!</div>,
+                placement: 'topRight',
+                icon: <SmileFilled style={{ color: '#5b63f3' }} />,
+            });
+        } else {
+            api.error({
+                message: infoMsg,
+                description: <div>Hello, {infoMsg}!</div>,
+                placement: 'topRight',
+                icon: <FrownOutlined style={{ color: '#f95755' }} />,
+            })
+        }
+
     };
 
     const getChatInfos = async () => {
@@ -52,7 +62,7 @@ const Home = () => {
             setChatInfos(res);
         } catch (err) {
             console.error(err);
-            showNotification('获取聊天记录失败');
+            showNotification('获取聊天记录失败', false);
         }
     }
 

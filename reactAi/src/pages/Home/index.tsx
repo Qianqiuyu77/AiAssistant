@@ -4,14 +4,14 @@ import "./index.scss"
 import ConversationList from "./compents/conversationList/index";
 import ChatWindow from "./compents/chatWindow";
 import useBaseStore from "../../../zustand/baseStore";
-import { getChat } from "../../api";
+import { deleteConversation, getChat, renameConversation } from "../../api";
 import { bus } from "../../bus";
 import SiderBar from "./compents/siderBar";
 
 interface HomeProps {
     chatInfos: ChatInfo[];
     userName: string;
-    showNotification: (message: string) => void;
+    showNotification: (message: string, isSuccess: boolean) => void;
     getChatInfos: () => void;
 }
 
@@ -133,6 +133,7 @@ const App = (homeProps: HomeProps) => {
     }
 
     const createNewKnowledgeBase = () => {
+        showNotification('创建新知识库', true);
         console.log('创建新知识库')
     }
 
@@ -147,10 +148,50 @@ const App = (homeProps: HomeProps) => {
             return res
 
         } catch (err) {
-            showNotification("获取回答失败")
+            showNotification("获取回答失败", false)
             throw err
         }
 
+    }
+
+    const fetchRenameConversation = async (conversationId: number, conversationName: string) => {
+        try {
+            const res = await renameConversation(conversationId, conversationName);
+            showNotification("重命名对话成功", true)
+            return res
+
+        } catch (err) {
+            showNotification("重命名对话失败", false)
+            throw err
+        }
+    }
+
+    const fetchDeleteConversation = async (conversationId: number) => {
+        try {
+            const res = await deleteConversation(conversationId);
+            showNotification("删除对话成功", true)
+            return res
+
+        } catch (err) {
+            showNotification("删除对话失败", false)
+            throw err
+        }
+    }
+
+
+
+    const clickRenameConversation = (conversationId: number, conversationName: string) => {
+        fetchRenameConversation(conversationId, conversationName).then(() => {
+            getChatInfos();
+        })
+        console.log('重命名对话', conversationId, conversationName);
+    }
+
+    const clickDeleteConversation = (conversationId: number) => {
+        fetchDeleteConversation(conversationId).then(() => {
+            getChatInfos();
+        })
+        console.log('删除对话', conversationId);
     }
 
     useEffect(() => {
@@ -219,6 +260,8 @@ const App = (homeProps: HomeProps) => {
                             currentCid={currentCid}
                             openHistoryConversation={openHistoryConversation}
                             openNewConversation={openNewConversation}
+                            renameConversation={clickRenameConversation}
+                            deleteConversation={clickDeleteConversation}
                         />
                     </div>
                     <div className="chatWindow">

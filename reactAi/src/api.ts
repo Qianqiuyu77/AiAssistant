@@ -61,3 +61,33 @@ export async function getChat(question: string, userId: number, conversationId?:
         throw new Error("Failed to fetch chat info");
     }
 }
+
+export async function renameConversation(conversationId: number, conversationName: string) {
+    try {
+        const res = await axios.get(`${host}/renameConversation`, {
+            params: {
+                conversationId,
+                conversationName
+            }
+        });
+        return res.data;
+    } catch (err) {
+        console.log(err);
+        throw new Error("Failed to fetch reName conversation");
+    }
+
+}
+
+export async function deleteConversation(conversationId: number) {
+    try {
+        const res = await axios.get(`${host}/deleteConversation`, {
+            params: {
+                conversationId,
+            }
+        });
+        return res.data;
+    } catch (err) {
+        console.log(err);
+        throw new Error("Failed to fetch delete conversation");
+    }
+}
