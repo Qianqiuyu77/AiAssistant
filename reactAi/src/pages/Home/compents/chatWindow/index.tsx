@@ -14,7 +14,8 @@ import { bus } from "../../../../bus";
 interface ChatWindowProps {
     chatInfo: ChatInfo;
     currentCid: number;
-    fetchGetAnswer: (question: string, canUseRAG: number, conversationId?: number) => Promise<ChatAnswer>;
+    currentKnowledgeBaseId: number;
+    fetchGetAnswer: (question: string, canUseRAG: number, currentKnowledgeBaseId: number, conversationId?: number) => Promise<ChatAnswer>;
     getChatInfos: () => void;
     openHistoryConversation: (conversationId: number) => void;
 }
@@ -24,7 +25,7 @@ const LIMIT_INPUT = 300;
 const ChatWindow = (chatWindowProps: ChatWindowProps) => {
     const baseState = useBaseStore();
 
-    const { chatInfo, fetchGetAnswer, currentCid, getChatInfos, openHistoryConversation } = chatWindowProps;
+    const { chatInfo, fetchGetAnswer, currentCid, currentKnowledgeBaseId, getChatInfos, openHistoryConversation } = chatWindowProps;
 
     const [inputValue, setInputValue] = useState<string>("");
 
@@ -36,7 +37,7 @@ const ChatWindow = (chatWindowProps: ChatWindowProps) => {
 
     const latestMessageRef = useRef<HTMLDivElement | null>(null);
 
-
+    const isEmptyConversation = !chatInfo.conversationInfo.length;
 
     const handleInputChange = (event: { target: { value: SetStateAction<string> } }) => {
         setInputValue(event.target.value);
@@ -69,7 +70,7 @@ const ChatWindow = (chatWindowProps: ChatWindowProps) => {
         scrollToLatest();
 
         try {
-            const res = await fetchGetAnswer(inputValue, canUseRAG, currentCid);
+            const res = await fetchGetAnswer(inputValue, canUseRAG, currentKnowledgeBaseId, currentCid);
 
             openHistoryConversation(res?.conversationId || currentCid);
 
@@ -196,7 +197,20 @@ const ChatWindow = (chatWindowProps: ChatWindowProps) => {
 
     return (
         <div className="chatWindowContainer">
+            {
+                isEmptyConversation &&
+                <div className="chatStartContainer">
+                    <div className="chatStartTitle">
+                        我是计算机智能助教，很高兴见到你！
+                    </div>
+                    <div className="chatStartContent">
+                        我可以根据知识库中的内容为你提供帮助，请告诉我你的问题。
+                    </div>
+                </div>
+            }
             <div className="chatMessageContainer" id="chatMessageContainer">
+
+
                 {chatInfo?.conversationInfo?.map((item, index) => {
                     const isLastMessage = index === chatInfo.conversationInfo.length - 1;
                     return (
@@ -239,7 +253,13 @@ const ChatWindow = (chatWindowProps: ChatWindowProps) => {
                     <div ref={latestMessageRef} />
                 }
             </div>
-            <div className="chatInputContainer">
+            <div
+                className="chatInputContainer"
+                style={{
+                    position: isEmptyConversation ? "absolute" : "relative",
+                    top: isEmptyConversation ? "55%" : "0"
+                }}
+            >
                 {
                     canScrollBottom && <div
                         className="scrollToBottom"

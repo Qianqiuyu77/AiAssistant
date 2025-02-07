@@ -23,7 +23,26 @@
     align-items: center;
     justify-content: center;
     white-space: pre-wrap;
+   .chatStartContainer{
+        position: absolute;
+        top: 40%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-top: 3rem;
+        .chatStartTitle{
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+        .chatStartContent{
+            font-size: 1rem;
 
+        }
+    }
     .chatMessageContainer{
         width: 100%;
         height: 90%;

@@ -26,7 +26,6 @@
         .siderBarListItemIcon{
             width: 2.8rem;
             height: 2.8rem;
-            background-color: pink;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -39,8 +38,19 @@
                     height: 100%;
                 }
             }
+           
             
+        }
+        .iconHover:hover {
+            transform: scale(1.2); /* 放大 1.2 倍 */
+            transition: transform 0.3s ease-in-out; /* 平滑过渡 */
+
+        }
+                                
+        .iconActive{
+            transform: scale(1.2);  
         }
 
     }
+    
 }

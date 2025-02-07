@@ -3,16 +3,23 @@ import App from './index';
 import useBaseStore from '../../../zustand/baseStore';
 import { notification } from 'antd';
 
-import { login, getAllChat } from '../../api';
-import { ChatInfo } from '../../types/chat';
+import { login, getAllChat, getAllKnowledgeBase } from '../../api';
+import { ChatInfo, KnowledgeBase } from '../../types/chat';
 import { FrownOutlined, SmileFilled } from '@ant-design/icons';
 
 const Home = () => {
     const baseState = useBaseStore();
+    const [knowledgeBases, setKnowledgeBases] = useState<KnowledgeBase[]>([]);
     const [chatInfos, setChatInfos] = useState<ChatInfo[]>([]);
     const [userName, setUserName] = useState<string>('');
 
-    const [api, contextHolder] = notification.useNotification(); // Hook 放在组件的顶层
+    const [api, contextHolder] = notification.useNotification(
+        {
+            stack: {
+                threshold: 3,
+            }
+        }
+    ); // Hook 放在组件的顶层
 
     // 登录函数
     async function fetchLogin() {
@@ -36,6 +43,19 @@ const Home = () => {
         }
     }
 
+    // 获取知识库
+
+    async function fetchGetAllKnowledgeBase(userId: number): Promise<KnowledgeBase[]> {
+        try {
+            const res = await getAllKnowledgeBase(userId);
+            return res.knowledgeBase
+
+        } catch (err) {
+            showNotification("获取知识库失败", false)
+            throw err
+        }
+    }
+
     // 通知显示函数
     const showNotification = (infoMsg: string, isSuccess = true) => {
         if (isSuccess) {
@@ -55,6 +75,16 @@ const Home = () => {
         }
 
     };
+
+    const getKnowledgeBases = async () => {
+        try {
+            const res = await fetchGetAllKnowledgeBase(baseState.userId);
+            setKnowledgeBases(res);
+            console.log(res);
+        } catch (err) {
+            console.error(err);
+        }
+    }
 
     const getChatInfos = async () => {
         try {
@@ -80,7 +110,10 @@ const Home = () => {
     // 获取聊天记录的副作用
     useEffect(() => {
         if (baseState.userId !== 0) {
-            getChatInfos();
+            Promise.all([
+                getKnowledgeBases(),
+                getChatInfos()
+            ])
         }
     }, [baseState.userId]);
 
@@ -89,6 +122,7 @@ const Home = () => {
             {contextHolder}
             <App
                 chatInfos={chatInfos}
+                knowledgeBases={knowledgeBases}
                 showNotification={showNotification}
                 getChatInfos={getChatInfos}
                 userName={userName}

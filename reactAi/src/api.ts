@@ -45,14 +45,15 @@ export async function getAllChat(userId: number): Promise<ChatInfo[]> {
     }
 }
 
-export async function getChat(question: string, userId: number, conversationId?: number, canUseRAG: number = 0) {
+export async function getChat(question: string, userId: number, conversationId?: number, knowledgeBaseId: number = 0, canUseRAG: number = 0) {
     try {
         const res = await axios.post(`${host}/chat`, (
             {
                 question,
                 userId,
                 conversationId,
-                canUseRAG
+                canUseRAG,
+                knowledgeBaseId,
             }
         ));
         return res.data;
@@ -60,6 +61,23 @@ export async function getChat(question: string, userId: number, conversationId?:
         console.log(err);
         throw new Error("Failed to fetch chat info");
     }
+}
+
+export async function getAllKnowledgeBase(userId: number) {
+    try {
+        const res = await axios.get(`${host}/getAllKnowledgeBase`, {
+            params: {
+                userId,
+            },
+        });
+        console.log(res.data);
+
+        return res.data;
+    } catch (err) {
+        console.log(err);
+        throw new Error("Failed to fetch knowledge base");
+    }
+
 }
 
 export async function renameConversation(conversationId: number, conversationName: string) {

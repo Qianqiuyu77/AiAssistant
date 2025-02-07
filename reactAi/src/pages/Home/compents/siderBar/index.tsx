@@ -8,39 +8,44 @@ interface SiderBarProps {
     clickKnowledgeBase: (knowledgeBaseId: number) => void
 }
 
+const dopamineColors = ["#FF6B6B", "#FFD93D", "#FF8E72", "#6BCB77", "#4D96FF", "#8358FF", "#FF5DA2"];
+
 const SiderBar = (siderBarProps: SiderBarProps) => {
     const {
-        knowledgeBaseList,
-        currentKnowledgeBaseId,
+        knowledgeBaseList = [],
+        currentKnowledgeBaseId = 0,
         clickKnowledgeBase
     } = siderBarProps
+
 
     return (
         <div className='siderBarList'>
             {
                 knowledgeBaseList.map((item) => {
                     return (
-                        <div
-                            key={item.knowledgeBaseId}
-                            className='siderBarListItem'
-                            style={{
-                                backgroundColor: item.knowledgeBaseId === currentKnowledgeBaseId ? '#fff' : ''
-                            }}
-                        >
+                        <>
                             <div
-                                className='siderBarListItemIcon'
-                                onClick={() => clickKnowledgeBase(item.knowledgeBaseId)}
+                                key={item.knowledgebaseId}
+                                className='siderBarListItem'
+                                style={{
+                                    backgroundColor: item.knowledgebaseId === currentKnowledgeBaseId ? '#fff' : ''
+                                }}
                             >
-                                <div className='iconBgc'>
-                                    <img
-                                        src={item.knowledgeIcon}
-                                        title={item.knowledgeBaseDescription}
-                                        alt={item.knowledgeBaseName}
-                                    />
+                                <div
+                                    className={`siderBarListItemIcon ${item.knowledgebaseId === currentKnowledgeBaseId ? 'iconActive' : 'iconHover'}`}
+                                    onClick={() => clickKnowledgeBase(item.knowledgebaseId)}
+                                    style={{ backgroundColor: dopamineColors[item.knowledgebaseId % dopamineColors.length] }}
+                                >
+                                    <div className="iconBgc">
+                                        <img
+                                            src={item.knowledgeIcon}
+                                            title={item.knowledgebaseInfo}
+                                            alt={item.knowledgebaseName}
+                                        />
+                                    </div>
                                 </div>
-
                             </div>
-                        </div>
+                        </>
                     )
                 })
             }

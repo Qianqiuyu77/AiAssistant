@@ -10,108 +10,22 @@ import SiderBar from "./compents/siderBar";
 
 interface HomeProps {
     chatInfos: ChatInfo[];
+    knowledgeBases: KnowledgeBase[];
     userName: string;
     showNotification: (message: string, isSuccess: boolean) => void;
     getChatInfos: () => void;
 }
 
-const knowledgeBaseList: KnowledgeBase[] = [
-    {
-        knowledgeBaseId: 1,
-        knowledgeBaseName: '计算机系统',
-        knowledgeBaseDescription: '计算机系统的描述',
-        knowledgeIcon: 'src/images/计算机.png'
-    },
-    {
-        knowledgeBaseId: 2,
-        knowledgeBaseName: 'JavaScript',
-        knowledgeBaseDescription: 'JavaScript的描述',
-        knowledgeIcon: 'src/images/js.png'
-    },
-    {
-        knowledgeBaseId: 3,
-        knowledgeBaseName: '操作系统',
-        knowledgeBaseDescription: '操作系统的描述',
-        knowledgeIcon: 'src/images/操作系统.png'
-    },
-    {
-        knowledgeBaseId: 4,
-        knowledgeBaseName: '计算机网络',
-        knowledgeBaseDescription: '计算机网络的描述',
-        knowledgeIcon: 'src/images/网络计算机.png'
-    },
-    {
-        knowledgeBaseId: 5,
-        knowledgeBaseName: '数据结构与算法',
-        knowledgeBaseDescription: '数据结构的描述',
-        knowledgeIcon: 'src/images/数据结构.png'
-    },
-    {
-        knowledgeBaseId: 6,
-        knowledgeBaseName: 'Java',
-        knowledgeBaseDescription: 'Java的描述',
-        knowledgeIcon: 'src/images/java.png'
-    },
-    {
-        knowledgeBaseId: 7,
-        knowledgeBaseName: 'Python',
-        knowledgeBaseDescription: 'Python的描述',
-        knowledgeIcon: 'src/images/python.png'
-    },
-    {
-        knowledgeBaseId: 8,
-        knowledgeBaseName: '计算机系统',
-        knowledgeBaseDescription: '计算机系统的描述',
-        knowledgeIcon: 'src/images/计算机.png'
-    },
-    {
-        knowledgeBaseId: 9,
-        knowledgeBaseName: 'JavaScript',
-        knowledgeBaseDescription: 'JavaScript的描述',
-        knowledgeIcon: 'src/images/js.png'
-    },
-    {
-        knowledgeBaseId: 10,
-        knowledgeBaseName: '操作系统',
-        knowledgeBaseDescription: '操作系统的描述',
-        knowledgeIcon: 'src/images/操作系统.png'
-    },
-    {
-        knowledgeBaseId: 11,
-        knowledgeBaseName: '计算机网络',
-        knowledgeBaseDescription: '计算机网络的描述',
-        knowledgeIcon: 'src/images/网络计算机.png'
-    },
-    {
-        knowledgeBaseId: 12,
-        knowledgeBaseName: '数据结构与算法',
-        knowledgeBaseDescription: '数据结构的描述',
-        knowledgeIcon: 'src/images/数据结构.png'
-    },
-    {
-        knowledgeBaseId: 13,
-        knowledgeBaseName: 'Java',
-        knowledgeBaseDescription: 'Java的描述',
-        knowledgeIcon: 'src/images/java.png'
-    },
-    {
-        knowledgeBaseId: 14,
-        knowledgeBaseName: 'Python',
-        knowledgeBaseDescription: 'Python的描述',
-        knowledgeIcon: 'src/images/python.png'
-    }
-]
-
 
 const App = (homeProps: HomeProps) => {
 
-    const { chatInfos = [], userName = '', showNotification, getChatInfos } = homeProps;
+    const { chatInfos = [], knowledgeBases = [], userName = '', showNotification, getChatInfos } = homeProps;
 
     const baseState = useBaseStore();
 
     const [currentCid, setCurrentCid] = useState<number>(-1);
 
-    const [currentKnowledgeBaseId, setCurrentKnowledgeBaseId] = useState<number>(1);
+    const [currentKnowledgeBaseId, setCurrentKnowledgeBaseId] = useState<number>(0);
 
     const getChatInfoByCid = () => {
         // 根据conversationId获取chatInfo
@@ -138,13 +52,14 @@ const App = (homeProps: HomeProps) => {
     }
 
     const clickKnowledgeBase = (knowledgeBaseId: number) => {
-        console.log('使用知识库', knowledgeBaseId);
+        if (knowledgeBaseId === currentKnowledgeBaseId) return;
         setCurrentKnowledgeBaseId(knowledgeBaseId);
+        showNotification('已成功切换至' + knowledgeBases.find((kb) => kb.knowledgebaseId === knowledgeBaseId)?.knowledgebaseName + "知识库", true);
     }
 
-    const fetchGetAnswer = async (question: string, canUseRAG: number = 0, conversationId?: number): Promise<ChatAnswer> => {
+    const fetchGetAnswer = async (question: string, canUseRAG: number = 0, currentKnowledgeBaseId = 0, conversationId?: number): Promise<ChatAnswer> => {
         try {
-            const res = await getChat(question, baseState.userId, conversationId, canUseRAG);
+            const res = await getChat(question, baseState.userId, conversationId, currentKnowledgeBaseId, canUseRAG);
             return res
 
         } catch (err) {
@@ -153,6 +68,7 @@ const App = (homeProps: HomeProps) => {
         }
 
     }
+
 
     const fetchRenameConversation = async (conversationId: number, conversationName: string) => {
         try {
@@ -200,6 +116,12 @@ const App = (homeProps: HomeProps) => {
         }
     }, [chatInfos])
 
+    useEffect(() => {
+        if (knowledgeBases && knowledgeBases.length > 0) {
+            setCurrentKnowledgeBaseId(knowledgeBases[0]?.knowledgebaseId || 0)
+        }
+    }, [knowledgeBases])
+
 
     return (
         <div className="homeContainer">
@@ -237,7 +159,7 @@ const App = (homeProps: HomeProps) => {
             <div className="mainContent">
                 <div className="siderBar">
                     <SiderBar
-                        knowledgeBaseList={knowledgeBaseList}
+                        knowledgeBaseList={knowledgeBases}
                         currentKnowledgeBaseId={currentKnowledgeBaseId}
                         clickKnowledgeBase={clickKnowledgeBase}
                     />
@@ -271,6 +193,7 @@ const App = (homeProps: HomeProps) => {
                             currentCid={currentCid}
                             getChatInfos={getChatInfos}
                             openHistoryConversation={openHistoryConversation}
+                            currentKnowledgeBaseId={currentKnowledgeBaseId}
                         />
                     </div>
                 </div>
