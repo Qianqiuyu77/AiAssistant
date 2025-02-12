@@ -7,6 +7,8 @@ import useBaseStore from "../../../zustand/baseStore";
 import { deleteConversation, getChat, renameConversation } from "../../api";
 import { bus } from "../../bus";
 import SiderBar from "./compents/siderBar";
+import { Dropdown, DropdownProps, MenuProps} from "antd";
+import { useNavigate } from "react-router-dom";
 
 interface HomeProps {
     chatInfos: ChatInfo[];
@@ -26,6 +28,36 @@ const App = (homeProps: HomeProps) => {
     const [currentCid, setCurrentCid] = useState<number>(-1);
 
     const [currentKnowledgeBaseId, setCurrentKnowledgeBaseId] = useState<number>(0);
+
+    const [open, setOpen] = useState(false); // 控制下拉菜单的显示与隐藏
+
+    const navigate = useNavigate();
+
+    const items: MenuProps["items"] = [
+        {
+            label: (
+                <div
+                    className="menuItem"
+                    onClick={
+                        () => {
+                            navigate('/login')
+                        }
+                    }
+                >
+                    <img src="src/images/退出.png" />
+                    退出登录
+                </div>
+
+            ),
+            key: "1",
+        },
+    ];
+
+    const handleOpenChange: DropdownProps["onOpenChange"] = (nextOpen, info) => {
+        if (info.source === "trigger" || nextOpen) {
+            setOpen(nextOpen);
+        }
+    };
 
     const getChatInfoByCid = () => {
         // 根据conversationId获取chatInfo
@@ -111,6 +143,8 @@ const App = (homeProps: HomeProps) => {
         console.log('删除对话', conversationId);
     }
 
+
+
     useEffect(() => {
         if (chatInfos && chatInfos.length > 0) {
             console.log(chatInfos)
@@ -152,9 +186,16 @@ const App = (homeProps: HomeProps) => {
                         alt=""
                         className="functionalIcon"
                     />
-                    <div className="userIcon functionalIcon">
-                        {userName.slice(0, 1)}
-                    </div>
+                    <Dropdown
+                        menu={{ items }}
+                        trigger={["click"]}
+                        open={open}
+                        onOpenChange={handleOpenChange}
+                    >
+                        <div className="userIcon functionalIcon">
+                            {userName.slice(0, 1)}
+                        </div>
+                    </Dropdown>
                 </div>
             </div>
             <div className="mainContent">
