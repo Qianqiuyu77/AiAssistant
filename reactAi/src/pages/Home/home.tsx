@@ -26,33 +26,9 @@ const Home = () => {
         try {
             const res = await login('Qianqiu', 'Xwc03420');
             console.log(res);
-            return res;
+            return res.data;
         } catch (err) {
             console.error(err);
-        }
-    }
-
-    // 获取聊天记录
-    async function fetchGetAllChatInfos(userId: number): Promise<ChatInfo[]> {
-        try {
-            const res = await getAllChat(userId);
-            return res;
-        } catch (err) {
-            console.error(err);
-            throw new Error('Failed to fetch chat info');
-        }
-    }
-
-    // 获取知识库
-
-    async function fetchGetAllKnowledgeBase(userId: number): Promise<KnowledgeBase[]> {
-        try {
-            const res = await getAllKnowledgeBase(userId);
-            return res.knowledgeBase
-
-        } catch (err) {
-            showNotification("获取知识库失败", false)
-            throw err
         }
     }
 
@@ -78,18 +54,31 @@ const Home = () => {
 
     const getKnowledgeBases = async () => {
         try {
-            const res = await fetchGetAllKnowledgeBase(baseState.userId);
-            setKnowledgeBases(res);
+            const res = await getAllKnowledgeBase(baseState.userId);
             console.log(res);
+            if (res.data) {
+                setKnowledgeBases(res.data);
+            } else {
+                setKnowledgeBases([]);
+                showNotification(res.msg || "获取知识库失败", false)
+            }
+
         } catch (err) {
             console.error(err);
+            showNotification("获取知识库失败", false)
         }
     }
 
     const getChatInfos = async () => {
         try {
-            const res = await fetchGetAllChatInfos(baseState.userId);
-            setChatInfos(res);
+            const res = await getAllChat(baseState.userId);
+            console.log(res);
+            if (res.data) {
+                setChatInfos(res.data)
+            } else {
+                setChatInfos([]);
+                showNotification(res.msg || "获取聊天记录失败", false)
+            }
         } catch (err) {
             console.error(err);
             showNotification('获取聊天记录失败', false);

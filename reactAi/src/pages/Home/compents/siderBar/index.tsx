@@ -17,35 +17,36 @@ const SiderBar = (siderBarProps: SiderBarProps) => {
         clickKnowledgeBase
     } = siderBarProps
 
+    console.log(knowledgeBaseList);
 
     return (
         <div className='siderBarList'>
             {
-                knowledgeBaseList.map((item) => {
+                knowledgeBaseList && knowledgeBaseList.map((item) => {
                     return (
-                        <>
+
+                        <div
+                            key={item.knowledgebaseId}
+                            className='siderBarListItem'
+                            style={{
+                                backgroundColor: item.knowledgebaseId === currentKnowledgeBaseId ? '#fff' : ''
+                            }}
+                        >
                             <div
-                                key={item.knowledgebaseId}
-                                className='siderBarListItem'
-                                style={{
-                                    backgroundColor: item.knowledgebaseId === currentKnowledgeBaseId ? '#fff' : ''
-                                }}
+                                className={`siderBarListItemIcon ${item.knowledgebaseId === currentKnowledgeBaseId ? 'iconActive' : 'iconHover'}`}
+                                onClick={() => clickKnowledgeBase(item.knowledgebaseId)}
+                                style={{ backgroundColor: dopamineColors[item.knowledgebaseId % dopamineColors.length] }}
                             >
-                                <div
-                                    className={`siderBarListItemIcon ${item.knowledgebaseId === currentKnowledgeBaseId ? 'iconActive' : 'iconHover'}`}
-                                    onClick={() => clickKnowledgeBase(item.knowledgebaseId)}
-                                    style={{ backgroundColor: dopamineColors[item.knowledgebaseId % dopamineColors.length] }}
-                                >
-                                    <div className="iconBgc">
-                                        <img
-                                            src={item.knowledgeIcon}
-                                            title={item.knowledgebaseInfo}
-                                            alt={item.knowledgebaseName}
-                                        />
-                                    </div>
+                                <div className="iconBgc">
+                                    <img
+                                        src={item.knowledgeIcon}
+                                        title={item.knowledgebaseInfo}
+                                        alt={item.knowledgebaseName}
+                                    />
                                 </div>
                             </div>
-                        </>
+                        </div>
+
                     )
                 })
             }

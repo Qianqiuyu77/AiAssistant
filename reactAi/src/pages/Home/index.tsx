@@ -60,7 +60,7 @@ const App = (homeProps: HomeProps) => {
     const fetchGetAnswer = async (question: string, canUseRAG: number = 0, currentKnowledgeBaseId = 0, conversationId?: number): Promise<ChatAnswer> => {
         try {
             const res = await getChat(question, baseState.userId, conversationId, currentKnowledgeBaseId, canUseRAG);
-            return res
+            return res.data
 
         } catch (err) {
             showNotification("获取回答失败", false)
@@ -106,6 +106,7 @@ const App = (homeProps: HomeProps) => {
     const clickDeleteConversation = (conversationId: number) => {
         fetchDeleteConversation(conversationId).then(() => {
             getChatInfos();
+            setCurrentCid(-1);
         })
         console.log('删除对话', conversationId);
     }

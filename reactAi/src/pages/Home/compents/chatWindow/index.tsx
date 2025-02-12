@@ -37,7 +37,7 @@ const ChatWindow = (chatWindowProps: ChatWindowProps) => {
 
     const latestMessageRef = useRef<HTMLDivElement | null>(null);
 
-    const isEmptyConversation = !chatInfo.conversationInfo.length;
+    const isEmptyConversation = currentCid === -1 && chatInfo.conversationInfo.length === 0;
 
     const handleInputChange = (event: { target: { value: SetStateAction<string> } }) => {
         setInputValue(event.target.value);

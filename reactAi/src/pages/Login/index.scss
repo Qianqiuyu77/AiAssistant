@@ -1,0 +1,29 @@
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f2f5;
+}
+
+.login-card {
+    width: 350px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.login-input {
+    margin-bottom: 10px;
+}
+
+.login-button {
+    margin-top: 10px;
+}
+
+.toggle-text {
+    display: block;
+    text-align: center;
+    color: #1890ff;
+    cursor: pointer;
+    margin-top: 10px;
+}

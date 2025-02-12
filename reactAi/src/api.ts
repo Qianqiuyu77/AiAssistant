@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { ChatInfo } from './types/chat';
 
 const host = 'http://localhost:5000'
 
@@ -25,20 +24,21 @@ export async function register(userName: string, passWord: string) {
                 passWord,
             },
         });
+
         return res.data;
     } catch (err) {
         return err;
     }
 }
 
-export async function getAllChat(userId: number): Promise<ChatInfo[]> {
+export async function getAllChat(userId: number) {
     try {
         const res = await axios.get(`${host}/getAllChat`, {
             params: {
                 userId,
             },
         });
-        return res.data.chatInfo;
+        return res.data;
     } catch (err) {
         console.log(err);
         throw new Error("Failed to fetch chat info");
@@ -56,10 +56,11 @@ export async function getChat(question: string, userId: number, conversationId?:
                 knowledgeBaseId,
             }
         ));
+
         return res.data;
     } catch (err) {
         console.log(err);
-        throw new Error("Failed to fetch chat info");
+        throw new Error("Failed to fetch chat info" + err);
     }
 }
 
@@ -70,7 +71,6 @@ export async function getAllKnowledgeBase(userId: number) {
                 userId,
             },
         });
-        console.log(res.data);
 
         return res.data;
     } catch (err) {
@@ -88,7 +88,9 @@ export async function renameConversation(conversationId: number, conversationNam
                 conversationName
             }
         });
-        return res.data;
+        console.log("renameres", res.data);
+
+        return res.data.data;
     } catch (err) {
         console.log(err);
         throw new Error("Failed to fetch reName conversation");
@@ -103,7 +105,8 @@ export async function deleteConversation(conversationId: number) {
                 conversationId,
             }
         });
-        return res.data;
+        console.log("deleteres", res.data);
+        return res.data.data;
     } catch (err) {
         console.log(err);
         throw new Error("Failed to fetch delete conversation");
