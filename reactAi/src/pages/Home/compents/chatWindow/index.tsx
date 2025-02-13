@@ -10,6 +10,7 @@ import { CaretRightOutlined } from '@ant-design/icons';
 import type { CollapseProps } from 'antd';
 import { Collapse, theme } from 'antd';
 import { bus } from "../../../../bus";
+import ReactMarkdown from "react-markdown";
 
 interface ChatWindowProps {
     chatInfo: ChatInfo;
@@ -228,7 +229,11 @@ const ChatWindow = (chatWindowProps: ChatWindowProps) => {
                                 {
                                     isLastMessage && item.content === ""
                                         ? <div className="chatLoding"><Spin /></div>
-                                        : <div className="chatAnswer">{item.content}</div>
+                                        : <div className="chatAnswer">
+                                            <ReactMarkdown>
+                                                {item.content}
+                                            </ReactMarkdown>
+                                        </div>
                                 }
 
                             </div>
