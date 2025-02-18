@@ -80,6 +80,7 @@ const ChatWindow = (chatWindowProps: ChatWindowProps) => {
             scrollToLatest();
         } catch (error) {
             console.error("获取答案失败:", error);
+            rollbackConversation();
             openHistoryConversation(currentCid);
             getChatInfos();
 
@@ -108,6 +109,13 @@ const ChatWindow = (chatWindowProps: ChatWindowProps) => {
             chatInfo.conversationInfo.push(message);
         }
     };
+
+    // rollback回话信息
+    const rollbackConversation = () => {
+        if (chatInfo?.conversationInfo) {
+            chatInfo.conversationInfo.pop();
+        }
+    }
 
     // 滚动到最新消息
     const scrollToLatest = () => {
