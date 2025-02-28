@@ -7,8 +7,7 @@ import useBaseStore from "../../../zustand/baseStore";
 import { deleteConversation, getChat, renameConversation } from "../../api";
 import { bus } from "../../bus";
 import SiderBar from "./compents/siderBar";
-import { Dropdown, DropdownProps, MenuProps} from "antd";
-import { useNavigate } from "react-router-dom";
+import Header from "../../component/header";
 
 interface HomeProps {
     chatInfos: ChatInfo[];
@@ -28,36 +27,6 @@ const App = (homeProps: HomeProps) => {
     const [currentCid, setCurrentCid] = useState<number>(-1);
 
     const [currentKnowledgeBaseId, setCurrentKnowledgeBaseId] = useState<number>(0);
-
-    const [open, setOpen] = useState(false); // 控制下拉菜单的显示与隐藏
-
-    const navigate = useNavigate();
-
-    const items: MenuProps["items"] = [
-        {
-            label: (
-                <div
-                    className="menuItem"
-                    onClick={
-                        () => {
-                            navigate('/login')
-                        }
-                    }
-                >
-                    <img src="src/images/退出.png" />
-                    退出登录
-                </div>
-
-            ),
-            key: "1",
-        },
-    ];
-
-    const handleOpenChange: DropdownProps["onOpenChange"] = (nextOpen, info) => {
-        if (info.source === "trigger" || nextOpen) {
-            setOpen(nextOpen);
-        }
-    };
 
     const getChatInfoByCid = () => {
         // 根据conversationId获取chatInfo
@@ -160,44 +129,9 @@ const App = (homeProps: HomeProps) => {
 
     return (
         <div className="homeContainer">
-            <div className="topBar">
-                <div className="logo">
-                    <img
-                        src="src\images\ai.png"
-                        className="topIcon"
-                    />
-                    <div className="topTitle">
-                        计算机智能助教
-                    </div>
-                </div>
-                <div className="functionalBar" >
-                    <div className="feedBack">
-                        <img src="src/images/意见反馈.png" alt="" />
-                        意见反馈
-                    </div>
-                    <div className="split">|</div>
-                    <img
-                        src="src/images/太阳.png"
-                        alt=""
-                        className="functionalIcon"
-                    />
-                    <img
-                        src="src/images/更多.png"
-                        alt=""
-                        className="functionalIcon"
-                    />
-                    <Dropdown
-                        menu={{ items }}
-                        trigger={["click"]}
-                        open={open}
-                        onOpenChange={handleOpenChange}
-                    >
-                        <div className="userIcon functionalIcon">
-                            {userName.slice(0, 1)}
-                        </div>
-                    </Dropdown>
-                </div>
-            </div>
+            <Header
+                userName={userName}
+            />
             <div className="mainContent">
                 <div className="siderBar">
                     <SiderBar

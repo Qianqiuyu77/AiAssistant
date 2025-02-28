@@ -112,3 +112,65 @@ export async function deleteConversation(conversationId: number) {
         throw new Error("Failed to fetch delete conversation");
     }
 }
+
+// 管理员接口
+export async function getusers(adminId: number) {
+    try {
+        const res = await axios.get(`${host}/admin/getusers`, {
+            params: {
+                userId: adminId
+            }
+        });
+        console.log("getusers", res.data);
+        return res.data;
+    } catch (err) {
+        console.log(err);
+        throw new Error("Failed to fetch users");
+    }
+}
+
+export async function resetPassword(userId: number) {
+    try {
+        const res = await axios.post(`${host}/admin/resetPassword`, (
+            {
+                userId
+            }
+        ));
+
+        return res.data;
+    } catch (err) {
+        console.log(err);
+        throw new Error("Failed to fetch resetPassword");
+    }
+}
+
+export async function getAllChatInfos(adminId: number) {
+    try {
+        const res = await axios.get(`${host}/admin/getAllChatInfos`, {
+            params: {
+                userId: adminId,
+            }
+        });
+
+        return res.data;
+    } catch (err) {
+        console.log(err);
+        throw new Error("Failed to fetch chat infos");
+    }
+
+}
+
+export async function getEcharsData(adminId: number) {
+    try {
+        const res = await axios.get(`${host}/admin/getEcharsData`, {
+            params: {
+                userId: adminId,
+            }
+        });
+
+        return res.data;
+    } catch (err) {
+        console.log(err);
+        throw new Error("Failed to fetch echars data");
+    }
+}

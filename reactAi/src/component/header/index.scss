@@ -1,0 +1,72 @@
+.topBar{
+    width: 99%;
+    height: 5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: #efefef solid 1px;
+    .logo{
+        display: flex;
+        align-items: center;
+        padding-left: 1rem;
+        .topIcon{
+            width: 2rem;
+            height: 1.5rem;
+        }
+        .topTitle{
+            font-size: 1.5rem;
+            font-weight: 100;
+            margin-left: 1rem;
+            font-family: "ZCOOL XiaoWei", serif;
+        }
+    }
+    .functionalBar{
+        display: flex;
+        align-items: center;
+        width: 18rem;
+        justify-content:space-between;
+        .feedBack{
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            img{
+                height: 1rem;
+                margin-right: 0.3rem;
+            }
+        }
+        .functionalIcon{
+            width: 1.5rem;
+            height: 1.5rem;
+            cursor: pointer;
+        }
+        .userIcon{
+            width: 2rem;
+            height: 2rem;
+            color: #fff;
+            font-size: 0.9rem;
+            background-color: #5d65f8;
+            text-align: center;
+            line-height: 2rem;
+            border-radius: 50%;
+        }
+        .split{
+            font-size: 0.8rem;
+        }
+    }
+
+}
+
+.menuItem{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 6rem;
+    font-size: 0.8rem;
+    padding: 0.5rem;
+    font-weight: 500;
+    img{
+      width: 1.2rem;
+      height: 1.2rem;
+      margin-right: 1rem;
+    }
+  }
