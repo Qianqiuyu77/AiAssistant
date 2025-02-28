@@ -45,6 +45,9 @@ const Sider = (props: SiderProps) => {
                     mode="inline"
                     theme="light"
                     inlineCollapsed={collapsed}
+                    style={{
+                        backgroundColor: '#f9f9f9',
+                    }}
                     items={items}
                     onClick={(e) => {
                         handleSiderBarClick(Number(e.key))

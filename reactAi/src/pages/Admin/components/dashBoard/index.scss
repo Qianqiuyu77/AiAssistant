@@ -1,0 +1,45 @@
+.container {
+    height: 100%;
+    overflow-y: scroll;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: 10rem 25rem 20rem 25rem; /* 4 行 */
+    gap: 2rem;
+  }
+  
+  .item {
+    font-size: 1.2rem;
+    color: white;
+    font-weight: bold;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.08);
+
+  }
+  
+  .item1 {
+    grid-column: span 1;
+    // background-color: lightblue;
+  }
+  
+  .item2 { 
+    grid-column: span 2; 
+    // background-color: lightcoral; 
+
+    }
+  .item4 { 
+    grid-column: span 4;
+    // background-color: lightgreen; 
+}
+.dataNumber{
+    font-size: 2rem;
+    margin-right: 0.5rem;
+    margin-left: 0.5rem;
+    color: #5d65f8;
+}
+.scoreInfo{
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+  
