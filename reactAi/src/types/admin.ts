@@ -12,3 +12,21 @@ export enum AdminSiderKeys {
     // 反馈信息
     FEEDBACK_INFORMATION = 6,
 }
+
+export interface KnowledgeBaseType {
+    knowledgeId: number;
+    knowledgeName: string;
+    knowledgeNameCN: string;
+    useCount: number;
+    avgScore: number;
+    rank?: number;
+}
+
+export interface EcharsData {
+    activeUserCount: number;
+    totalUserCount: number;
+    totalMessageCount: number;
+    messageCount: number[];
+    avgScore: number[];
+    knowledgeBasesData: KnowledgeBaseType[];
+}

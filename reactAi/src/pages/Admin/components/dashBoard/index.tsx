@@ -2,80 +2,48 @@ import Card from 'antd/es/card';
 import './index.scss'
 import Tooltip from 'antd/es/tooltip';
 import { InfoCircleOutlined } from '@ant-design/icons';
-import { Column } from '@ant-design/charts';
+import { Column, Pie } from '@ant-design/charts';
+
+import { Table } from 'antd';
+import { EcharsData, KnowledgeBaseType } from '../../../../types/admin';
+import { useEffect, useState } from 'react';
+import { useMakeEcharsData } from './hooks';
+
+interface DashBoardProps {
+    echarsData: EcharsData
+}
 
 
-const data = {
-    activeUserCount: 1,
-    totalUserCount: 11,
-    totalMessageCount: 191,
-    messageCount: [0, 0, 0, 0, 0, 0, 3],
-    avgScore: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.7316798533333334]
-};
+const Dashboard = (props: DashBoardProps) => {
 
+    const { echarsData } = props;
 
-const Dashboard = () => {
+    const [loading, setLoading] = useState<boolean>(true);
 
-    // const activeUserPercentage = (data.activeUserCount / data.totalUserCount) * 100;
+    const {
+        maxScore,
+        minScore,
+        avgScoreValue,
+        avgConfig,
+        chatNumberConfig,
+        knowledgeCountConfig,
+        sortedData,
+        columns
+    } = useMakeEcharsData({ echarsData });
 
-    // 一周总消息数
-    // const weekTotalMessages = data.messageCount.reduce((acc, count) => acc + count, 0);
-
-    // 最大评分
-    const maxScore = Math.max(...data.avgScore).toFixed(2);
-
-    // 最小评分
-    const minScore = Math.min(...data.avgScore).toFixed(2);
-
-    // 平均评分
-    const totalScore = data.avgScore.reduce((acc, score) => acc + score, 0);
-    const avgScoreValue = totalScore / data.avgScore.length;
-
-    const avgData = data.avgScore.map((score, index) => ({
-        index: `第 ${index + 1} 天`, // X 轴标签
-        score: score, // Y 轴值
-    }));
-
-    const chatNumberData = data.messageCount.map((count, index) => ({
-        index: `第 ${index + 1} 天`, // X 轴标签
-        count: count, // Y 轴值
-    }))
-
-    const avgConfig = {
-        data: avgData,
-        xField: "index",  // X 轴
-        yField: "score",  // Y 轴
-        label: {
-            position: "middle",
-            style: { fill: "#FFFFFF" },
-        },
-        height: 300,
-        maxColumnWidth: 40,
-        color: "#5d65f8", // 统一颜色
-        xAxis: { label: { autoHide: true, autoRotate: false } },
-        yAxis: { min: 0, max: 1 }, // 评分一般 0~1 之间
-    };
-
-    const chatNumberConfig = {
-        data: chatNumberData,
-        xField: "index",  // X 轴
-        yField: "count",  // Y 轴
-        label: {
-            position: "middle",
-            style: { fill: "#FFFFFF" },
-        },
-        height: 300,
-        maxColumnWidth: 40,
-        color: ['#5d65f8'], // 统一颜色
-        xAxis: { label: { autoHide: true, autoRotate: false } },
-        yAxis: { min: 0, max: 100 },
-    }
-
+    useEffect(() => {
+        if (echarsData.totalUserCount === 0) {
+            setLoading(true)
+        } else {
+            setLoading(false)
+        }
+    }, [echarsData])
 
     return (
         <div className="container">
             <div className="item item1 personNumber">
                 <Card
+                    loading={loading}
                     title="活跃用户数量"
                     style={{ height: '100%' }}
                     extra={
@@ -83,11 +51,12 @@ const Dashboard = () => {
                             <InfoCircleOutlined />
                         </Tooltip>
                     }>
-                    <span className='dataNumber'>{data.activeUserCount}</span>人
+                    <span className='dataNumber'>{echarsData.activeUserCount}</span>人
                 </Card>
             </div>
             <div className="item item1">
                 <Card
+                    loading={loading}
                     title="总对话次数"
                     style={{ height: '100%' }}
                     extra={
@@ -96,11 +65,12 @@ const Dashboard = () => {
                         </Tooltip>
                     }
                 >
-                    <span className='dataNumber'>{data.totalMessageCount}</span>次
+                    <span className='dataNumber'>{echarsData.totalMessageCount}</span>次
                 </Card>
             </div>
             <div className="item item1">
                 <Card
+                    loading={loading}
                     title="一周对话平均分数"
                     style={{ height: '100%' }}
                     extra={
@@ -117,6 +87,7 @@ const Dashboard = () => {
             </div>
             <div className="item item1">
                 <Card
+                    loading={loading}
                     title="用户总量"
                     style={{ height: '100%' }}
                     extra={
@@ -125,13 +96,14 @@ const Dashboard = () => {
                         </Tooltip>
                     }
                 >
-                    <span className='dataNumber'>{data.totalUserCount}</span>人
+                    <span className='dataNumber'>{echarsData.totalUserCount}</span>人
                 </Card>
             </div>
 
             <div className="item item4">
                 <Card
-                    title="一周对话得分"
+                    loading={loading}
+                    title="三十天对话得分"
                     style={{ height: '100%' }}
                     extra={
                         <Tooltip title="指标说明">
@@ -146,7 +118,8 @@ const Dashboard = () => {
 
             <div className="item item2">
                 <Card
-                    title="数据库使用排行"
+                    loading={loading}
+                    title="知识库使用得分"
                     style={{ height: '100%' }}
                     extra={
                         <Tooltip title="指标说明">
@@ -154,12 +127,26 @@ const Dashboard = () => {
                         </Tooltip>
                     }
                 >
+                    <div className='knowledgeTable'>
+                        <Table<KnowledgeBaseType>
+                            columns={columns}
+                            dataSource={sortedData}
+                            size='small'
+                            rowKey="knowledgeId"
+                            pagination={{
+                                pageSize: 4,
+                                hideOnSinglePage: true,
+
+                            }}
+                        />
+                    </div>
 
                 </Card>
             </div>
             <div className="item item2">
                 <Card
-                    title="活跃度"
+                    loading={loading}
+                    title="知识库使用占比"
                     style={{ height: '100%' }}
                     extra={
                         <Tooltip title="指标说明">
@@ -167,13 +154,18 @@ const Dashboard = () => {
                         </Tooltip>
                     }
                 >
+                    <div className='knowledgePie'>
+                        <Pie className={'pie'} {...knowledgeCountConfig} />
+                    </div>
+
 
                 </Card>
             </div>
 
             <div className="item item4">
                 <Card
-                    title="一周问答次数"
+                    loading={loading}
+                    title="三十天问答次数"
                     style={{ height: '100%' }}
                     extra={
                         <Tooltip title="指标说明">

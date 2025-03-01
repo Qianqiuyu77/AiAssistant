@@ -3,10 +3,15 @@ import Header from "../../component/header";
 import Sider from "./components/sider";
 
 import "./index.scss";
-import { AdminSiderKeys } from "../../types/admin";
+import { AdminSiderKeys, EcharsData } from "../../types/admin";
 import Dashboard from "./components/dashBoard";
 
-const App = () => {
+interface AdminProps {
+    echarsData: EcharsData;
+}
+
+const App = (props: AdminProps) => {
+    const { echarsData } = props;
     const [selectKey, setSelectKey] = useState<number>(AdminSiderKeys.DASHBOARD_DATA)
 
     const handleSiderBarClick = (selectKeyId: number) => {
@@ -16,7 +21,7 @@ const App = () => {
     const renderContent = () => {
         switch (selectKey) {
             case AdminSiderKeys.DASHBOARD_DATA:
-                return <Dashboard />;
+                return <Dashboard echarsData={echarsData} />;
             case AdminSiderKeys.USER_MANAGEMENT:
                 return <div>User Manage</div>;
             case AdminSiderKeys.LOG_MANAGEMENT:

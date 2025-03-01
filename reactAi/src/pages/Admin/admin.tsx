@@ -1,38 +1,60 @@
-import { useEffect } from "react";
-import { getAllChatInfos, getEcharsData, getusers, resetPassword } from "../../api";
+import { useEffect, useState } from "react";
+import { getEcharsData } from "../../api";
 import App from "./index";
+import { message } from "antd";
+import { EcharsData } from "../../types/admin";
 
 const Admin = () => {
-    const fetchGetusers = async () => {
-        const res = await getusers(1);
-        console.log(res);
+
+    const [echarsData, setEcharsData] = useState<EcharsData>({
+        activeUserCount: 0,
+        totalUserCount: 0,
+        totalMessageCount: 0,
+        messageCount: [],
+        avgScore: [],
+        knowledgeBasesData: []
+    });
+
+    async function fetchGetEcharsData() {
+        try {
+            const res = await getEcharsData(1);
+            console.log(res);
+            if (res.data) {
+                setEcharsData(res.data);
+            } else {
+                message.error({
+                    content: res.msg || "操作失败，请重试",
+                    key: "loading",
+                    duration: 2,
+                })
+            }
+
+            return res.data;
+        } catch (err) {
+            console.log(err);
+
+            message.error({
+                content: "操作失败，请重试",
+                key: "loading",
+                duration: 2,
+            });
+        }
     }
 
-    const fetchResetPassword = async () => {
-        const res = await resetPassword(1120)
-        console.log(res);
-    }
 
-    const fetchGetAllChatInfos = async () => {
-        const res = await getAllChatInfos(1);
-        console.log(res);
-    }
 
-    const fetchGetEcharsData = async () => {
-        const res = await getEcharsData(1);
-        console.log(res);
-    }
-
+    // 使用副作用处理登录逻辑
     useEffect(() => {
-        fetchGetusers()
-        fetchResetPassword()
-        fetchGetAllChatInfos()
-        fetchGetEcharsData()
-    }, [])
+        fetchGetEcharsData();
+    }, []);
+
+
 
     return (
         <>
-            <App />
+            <App
+                echarsData={echarsData}
+            />
         </>
     );
 }

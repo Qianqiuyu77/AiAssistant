@@ -42,4 +42,32 @@
     font-size: 0.8rem;
     font-weight: 500;
 }
+.knowledgeTable{
+    width: 100%;
+    height: 100%;
+    // background-color: red;
+}
+.rankColumn{
+  // display: flex;
+  // justify-content: center;
+  // align-items: center;
+  text-align: center;
+}
+
+.knowledgeNameColumn{
+  color: #5d65f8;
+}
   
+/* 修改整个表格表头的背景色和文字颜色 */
+.ant-table-thead th {
+  text-align: center; /* 让文字居中 */
+}
+
+.pie{
+  // background-color: red;
+  height: 8rem;
+  display: flex;
+  justify-content:center;
+  align-items: start;
+  margin-top: -2rem;
+}

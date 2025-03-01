@@ -36,7 +36,7 @@ const Login = () => {
                     setIsRegister(false); // 注册成功后重置为登录状态
                     navigate("/login");
                 } else {
-                    navigate("/home"); // 登录成功后跳转到首页
+                    navigate("/home", { state: { userName: response.data.userName, userId: response.data.userId } });// 登录成功后跳转到首页
                 }
             } else {
                 message.error({
