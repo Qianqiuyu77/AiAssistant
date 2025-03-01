@@ -3,15 +3,17 @@ import App from './index';
 import useBaseStore from '../../../zustand/baseStore';
 import { notification } from 'antd';
 
-import { login, getAllChat, getAllKnowledgeBase } from '../../api';
+import { getAllChat, getAllKnowledgeBase } from '../../api';
 import { ChatInfo, KnowledgeBase } from '../../types/chat';
 import { FrownOutlined, SmileFilled } from '@ant-design/icons';
+import { useLocation } from "react-router-dom";
 
 const Home = () => {
+    const location = useLocation();
+    const { userName, userId, token } = location.state || {};
     const baseState = useBaseStore();
     const [knowledgeBases, setKnowledgeBases] = useState<KnowledgeBase[]>([]);
     const [chatInfos, setChatInfos] = useState<ChatInfo[]>([]);
-    const [userName, setUserName] = useState<string>('');
 
     const [api, contextHolder] = notification.useNotification(
         {
@@ -20,17 +22,6 @@ const Home = () => {
             }
         }
     ); // Hook 放在组件的顶层
-
-    // 登录函数
-    async function fetchLogin() {
-        try {
-            const res = await login('Qianqiu', 'Xwc03420');
-            console.log(res);
-            return res.data;
-        } catch (err) {
-            console.error(err);
-        }
-    }
 
     // 通知显示函数
     const showNotification = (infoMsg: string, isSuccess = true) => {
@@ -85,16 +76,12 @@ const Home = () => {
         }
     }
 
-    // 使用副作用处理登录逻辑
     useEffect(() => {
-        async function getLogin() {
-            const { userId, userName } = await fetchLogin();
+        if (userId) {
+            baseState.setToken(token);
             baseState.setUserId(userId);
-            setUserName(userName);
         }
-
-        getLogin();
-    }, []);
+    }, [userId])
 
     // 获取聊天记录的副作用
     useEffect(() => {

@@ -114,11 +114,11 @@ export async function deleteConversation(conversationId: number) {
 }
 
 // 管理员接口
-export async function getusers(adminId: number) {
+export async function getusers(token: string) {
     try {
         const res = await axios.get(`${host}/admin/getusers`, {
-            params: {
-                userId: adminId
+            headers: {
+                Authorization: `Bearer ${token}`
             }
         });
         console.log("getusers", res.data);
@@ -144,11 +144,11 @@ export async function resetPassword(userId: number) {
     }
 }
 
-export async function getAllChatInfos(adminId: number) {
+export async function getAllChatInfos(token: string) {
     try {
         const res = await axios.get(`${host}/admin/getAllChatInfos`, {
-            params: {
-                userId: adminId,
+            headers: {
+                Authorization: `Bearer ${token}`
             }
         });
 
@@ -160,11 +160,11 @@ export async function getAllChatInfos(adminId: number) {
 
 }
 
-export async function getEcharsData(adminId: number) {
+export async function getEcharsData(token: string) {
     try {
         const res = await axios.get(`${host}/admin/getEcharsData`, {
-            params: {
-                userId: adminId,
+            headers: {
+                Authorization: `Bearer ${token}`
             }
         });
 

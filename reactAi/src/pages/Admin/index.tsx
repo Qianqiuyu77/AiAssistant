@@ -8,10 +8,11 @@ import Dashboard from "./components/dashBoard";
 
 interface AdminProps {
     echarsData: EcharsData;
+    userName: string;
 }
 
 const App = (props: AdminProps) => {
-    const { echarsData } = props;
+    const { echarsData, userName } = props;
     const [selectKey, setSelectKey] = useState<number>(AdminSiderKeys.DASHBOARD_DATA)
 
     const handleSiderBarClick = (selectKeyId: number) => {
@@ -39,7 +40,7 @@ const App = (props: AdminProps) => {
 
     return (
         <div className="adminPage">
-            <Header userName="Admin" />
+            <Header userName={userName} />
             <div className="mainContent">
                 <Sider handleSiderBarClick={handleSiderBarClick} />
                 <div className="adminPageContent" >

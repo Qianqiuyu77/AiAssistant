@@ -3,8 +3,12 @@ import { getEcharsData } from "../../api";
 import App from "./index";
 import { message } from "antd";
 import { EcharsData } from "../../types/admin";
+import { useLocation } from "react-router-dom";
 
 const Admin = () => {
+
+    const location = useLocation();
+    const { userName, token } = location.state || {};
 
     const [echarsData, setEcharsData] = useState<EcharsData>({
         activeUserCount: 0,
@@ -17,13 +21,13 @@ const Admin = () => {
 
     async function fetchGetEcharsData() {
         try {
-            const res = await getEcharsData(1);
+            const res = await getEcharsData(token);
             console.log(res);
             if (res.data) {
                 setEcharsData(res.data);
             } else {
                 message.error({
-                    content: res.msg || "操作失败，请重试",
+                    content: res.msg || "获取看板数据失败，请重试",
                     key: "loading",
                     duration: 2,
                 })
@@ -34,7 +38,7 @@ const Admin = () => {
             console.log(err);
 
             message.error({
-                content: "操作失败，请重试",
+                content: "获取看板数据失败，请重试",
                 key: "loading",
                 duration: 2,
             });
@@ -54,6 +58,7 @@ const Admin = () => {
         <>
             <App
                 echarsData={echarsData}
+                userName={userName}
             />
         </>
     );
