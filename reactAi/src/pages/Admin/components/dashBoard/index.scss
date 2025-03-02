@@ -60,7 +60,7 @@
   
 /* 修改整个表格表头的背景色和文字颜色 */
 .ant-table-thead th {
-  text-align: center; /* 让文字居中 */
+  text-align: center /* 让文字居中 */ !important;
 }
 
 .pie{

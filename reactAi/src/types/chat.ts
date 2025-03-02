@@ -37,5 +37,10 @@ export interface KnowledgeBase {
     knowledgebaseInfo: string
     knowledgeIcon: string
     createdAt?: number
+}
 
+export interface MessageType extends ConversationInfo {
+    userId: number
+    conversationId: number
+    knowledgeId: number
 }

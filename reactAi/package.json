@@ -15,6 +15,7 @@
     "@types/react-transition-group": "^4.4.12",
     "antd": "^5.23.1",
     "axios": "^1.7.9",
+    "dayjs": "^1.11.13",
     "eventemitter3": "^5.0.1",
     "gpt-3-encoder": "^1.1.4",
     "react": "^18.3.1",

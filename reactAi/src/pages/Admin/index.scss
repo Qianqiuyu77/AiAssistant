@@ -22,5 +22,22 @@
             padding-bottom: 0.5rem;
         }
     }
+         .adminPageContentFooter {
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+            color: #8c8c8c; 
+            text-align: center; 
+            padding: 10px 0; 
+            font-size: 14px;
+            }
+
+        .adminPageContentFooter a {
+        color: #5d65f8; 
+        text-decoration: none;
+        }
+
+        .adminPageContentFooter a:hover {
+        text-decoration: underline; 
+        }
    
 }

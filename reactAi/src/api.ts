@@ -1,4 +1,7 @@
 import axios from 'axios';
+import { IResPonse } from './types/utils';
+import { EcharsData, UserChatInfos, UserData } from './types/admin';
+import { MessageType } from './types/chat';
 
 const host = 'http://localhost:5000'
 
@@ -114,14 +117,13 @@ export async function deleteConversation(conversationId: number) {
 }
 
 // 管理员接口
-export async function getusers(token: string) {
+export async function getusers(token: string): Promise<IResPonse<UserData[]>> {
     try {
         const res = await axios.get(`${host}/admin/getusers`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
         });
-        console.log("getusers", res.data);
         return res.data;
     } catch (err) {
         console.log(err);
@@ -129,13 +131,18 @@ export async function getusers(token: string) {
     }
 }
 
-export async function resetPassword(userId: number) {
+export async function resetPassword(token: string, userId: number): Promise<IResPonse> {
     try {
-        const res = await axios.post(`${host}/admin/resetPassword`, (
+        const res = await axios.post(`${host}/admin/resetPassword`,
             {
-                userId
+                userId,
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
             }
-        ));
+        )
 
         return res.data;
     } catch (err) {
@@ -144,7 +151,7 @@ export async function resetPassword(userId: number) {
     }
 }
 
-export async function getAllChatInfos(token: string) {
+export async function getAllChatInfos(token: string): Promise<IResPonse<UserChatInfos[]>> {
     try {
         const res = await axios.get(`${host}/admin/getAllChatInfos`, {
             headers: {
@@ -160,7 +167,22 @@ export async function getAllChatInfos(token: string) {
 
 }
 
-export async function getEcharsData(token: string) {
+export async function getAllMessages(token: string): Promise<IResPonse<MessageType[]>> {
+    try {
+        const res = await axios.get(`${host}/admin/getAllMessages`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        return res.data;
+    } catch (err) {
+        console.log(err);
+        throw new Error("Failed to fetch messages infos");
+    }
+}
+
+export async function getEcharsData(token: string): Promise<IResPonse<EcharsData>> {
     try {
         const res = await axios.get(`${host}/admin/getEcharsData`, {
             headers: {

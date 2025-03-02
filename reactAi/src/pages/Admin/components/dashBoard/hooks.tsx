@@ -104,12 +104,13 @@ export const useMakeEcharsData = (ichartData: IChartData) => {
             title: 'KnowledgeName',
             dataIndex: 'knowledgeNameCN',
             key: 'knowledgeNameCN',
-            className: 'knowledgeNameColumn',
+            className: 'knowledgeNameColumn rankColumn',
         },
         {
             title: 'avgScore',
             dataIndex: 'avgScore',
             key: 'avgScore',
+            className: 'rankColumn',
         }
     ];
 

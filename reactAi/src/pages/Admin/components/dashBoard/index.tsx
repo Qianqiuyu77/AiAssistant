@@ -71,7 +71,7 @@ const Dashboard = (props: DashBoardProps) => {
             <div className="item item1">
                 <Card
                     loading={loading}
-                    title="一周对话平均分数"
+                    title="三十天对话平均分数"
                     style={{ height: '100%' }}
                     extra={
                         <Tooltip title="指标说明">
