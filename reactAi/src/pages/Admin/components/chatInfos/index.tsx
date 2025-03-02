@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {
     Table,
     Card,
@@ -172,7 +173,6 @@ const ChatInfos = (props: ChatInfosProps) => {
                     </Tooltip>
                 }
             >
-                {/* 搜索栏 */}
                 {/* 搜索栏 */}
                 <div style={{ marginBottom: 24 }}>
                     <Row

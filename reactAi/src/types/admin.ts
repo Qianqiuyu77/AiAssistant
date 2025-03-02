@@ -13,6 +13,8 @@ export enum AdminSiderKeys {
     LOG_MANAGEMENT = 5,
     // 反馈信息
     FEEDBACK_INFORMATION = 6,
+    // 新增知识库
+    ADD_KNOWLEDGE_BASE = 7,
 }
 
 export interface KnowledgeBaseType {

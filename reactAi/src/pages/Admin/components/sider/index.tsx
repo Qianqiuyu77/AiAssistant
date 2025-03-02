@@ -32,7 +32,13 @@ const Sider = (props: SiderProps) => {
         { key: AdminSiderKeys.DASHBOARD_DATA, icon: <PieChartOutlined />, label: '看板数据' },
         { key: AdminSiderKeys.USER_MANAGEMENT, icon: <DesktopOutlined />, label: '用户管理' },
         { key: AdminSiderKeys.CHAT_INFORMATION, icon: <MailOutlined />, label: '对话信息' },
-        { key: AdminSiderKeys.KNOWLEDGE_BASE_MANAGEMENT, icon: <AppstoreOutlined />, label: '知识库管理' },
+        {
+            key: 'knowledgeBase', icon: <AppstoreOutlined />, label: '知识库',
+            children: [
+                { key: AdminSiderKeys.KNOWLEDGE_BASE_MANAGEMENT, label: '知识库管理' },
+                { key: AdminSiderKeys.ADD_KNOWLEDGE_BASE, label: '新增知识库' },
+            ]
+        },
         { key: AdminSiderKeys.LOG_MANAGEMENT, icon: <ContainerOutlined />, label: '日志管理' },
         // { key: AdminSiderKeys.FEEDBACK_INFORMATION, icon: <AppstoreOutlined />, label: '反馈信息', },
     ];

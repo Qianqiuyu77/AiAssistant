@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import Header from "../../component/header";
 import Sider from "./components/sider";
@@ -11,6 +12,7 @@ import LogManger from "./components/logManger";
 import ChatInfos from "./components/chatInfos";
 import KnowledgeManger from "./components/knowledgeManger";
 import FeedBack from "./components/feedBack";
+import AddKnowLedgeBases from "./components/addKnowLedgeBases";
 
 interface AdminProps {
     echarsData: EcharsData;
@@ -56,6 +58,8 @@ const App = (props: AdminProps) => {
                 return <KnowledgeManger knowledgeBases={knowledgeBases} />;
             case AdminSiderKeys.FEEDBACK_INFORMATION:
                 return <FeedBack />;
+            case AdminSiderKeys.ADD_KNOWLEDGE_BASE:
+                return <AddKnowLedgeBases />
             default:
                 return <div>404 Not Found</div>;
         }

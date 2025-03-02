@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import { getAllKnowledgeBase, getAllMessages, getEcharsData, getusers } from "../../api";
 import App from "./index";
