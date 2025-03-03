@@ -1,4 +1,4 @@
-export interface IResPonse<T = null> {
+export interface IResponse<T = null> {
     data: T;
     msg: string;
 }

@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { IResPonse } from './types/utils';
-import { EcharsData, UserChatInfos, UserData } from './types/admin';
+import { IResponse } from './types/utils';
+import { AddKnowledgeData, AdminKnowledgeBase, ChunksData, EcharsData, UserChatInfos, UserData } from './types/admin';
 import { MessageType } from './types/chat';
 
 const host = 'http://localhost:5000'
@@ -117,7 +117,7 @@ export async function deleteConversation(conversationId: number) {
 }
 
 // 管理员接口
-export async function getusers(token: string): Promise<IResPonse<UserData[]>> {
+export async function getusers(token: string): Promise<IResponse<UserData[]>> {
     try {
         const res = await axios.get(`${host}/admin/getusers`, {
             headers: {
@@ -131,7 +131,7 @@ export async function getusers(token: string): Promise<IResPonse<UserData[]>> {
     }
 }
 
-export async function resetPassword(token: string, userId: number): Promise<IResPonse> {
+export async function resetPassword(token: string, userId: number): Promise<IResponse> {
     try {
         const res = await axios.post(`${host}/admin/resetPassword`,
             {
@@ -151,7 +151,7 @@ export async function resetPassword(token: string, userId: number): Promise<IRes
     }
 }
 
-export async function getAllChatInfos(token: string): Promise<IResPonse<UserChatInfos[]>> {
+export async function getAllChatInfos(token: string): Promise<IResponse<UserChatInfos[]>> {
     try {
         const res = await axios.get(`${host}/admin/getAllChatInfos`, {
             headers: {
@@ -167,7 +167,7 @@ export async function getAllChatInfos(token: string): Promise<IResPonse<UserChat
 
 }
 
-export async function getAllMessages(token: string): Promise<IResPonse<MessageType[]>> {
+export async function getAllMessages(token: string): Promise<IResponse<MessageType[]>> {
     try {
         const res = await axios.get(`${host}/admin/getAllMessages`, {
             headers: {
@@ -182,7 +182,7 @@ export async function getAllMessages(token: string): Promise<IResPonse<MessageTy
     }
 }
 
-export async function getEcharsData(token: string): Promise<IResPonse<EcharsData>> {
+export async function getEcharsData(token: string): Promise<IResponse<EcharsData>> {
     try {
         const res = await axios.get(`${host}/admin/getEcharsData`, {
             headers: {
@@ -194,5 +194,87 @@ export async function getEcharsData(token: string): Promise<IResPonse<EcharsData
     } catch (err) {
         console.log(err);
         throw new Error("Failed to fetch echars data");
+    }
+}
+
+
+// 1. 删除知识库
+export async function deleteKnowledgeBase(token: string, knowledgeBaseId: number): Promise<IResponse<null>> {
+    try {
+        const res = await axios.get(`${host}/admin/deleteKnowledgeBase`, {
+            params: { knowledgeBaseId },
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        return res.data;
+    } catch (err) {
+        console.error(err);
+        throw new Error("Failed to delete knowledge base");
+    }
+}
+
+// 2. 更新知识库
+export async function updateKnowledgeBase(
+    token: string,
+    knowledgeBase: AdminKnowledgeBase
+): Promise<IResponse<boolean>> {
+    try {
+        const res = await axios.post(`${host}/admin/updateKnowledgeBase`,
+            {
+                knowledgeBaseId: Number(knowledgeBase.knowledgebaseId),
+                knowledgeName: knowledgeBase.knowledgebaseNameSimple,
+                knowledgeIntroduce: knowledgeBase.knowledgebaseInfo,
+                knowledgeNameCN: knowledgeBase.knowledgebaseName,
+            }, {
+
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+            }
+        });
+
+        return res.data;
+    } catch (err) {
+        console.error(err);
+        throw new Error("Failed to update knowledge base");
+    }
+}
+
+// 3. 新建知识库
+export async function createKnowledgeBase(
+    token: string,
+    formData: AddKnowledgeData
+): Promise<IResponse<{ knowledgeName: string; knowledgeId: string }>> {
+    try {
+        const res = await axios.post(`${host}/admin/newKnowledgeBase`, formData, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "multipart/form-data"
+            }
+        });
+
+        return res.data;
+    } catch (err) {
+        console.error(err);
+        throw new Error("Failed to create knowledge base");
+    }
+}
+
+// 4. 预览文件分块
+export async function previewChunks(token: string, chunksData: ChunksData): Promise<IResponse<{ chunksPreview: string[] }>> {
+    try {
+        const res = await axios.post(`${host}/admin/previewChunks`, chunksData, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "multipart/form-data"
+            }
+        });
+
+        return res.data;
+    } catch (err) {
+        console.error(err);
+        throw new Error("Failed to preview chunks");
     }
 }

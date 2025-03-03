@@ -18,6 +18,7 @@
     "dayjs": "^1.11.13",
     "eventemitter3": "^5.0.1",
     "gpt-3-encoder": "^1.1.4",
+    "lodash-es": "^4.17.21",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-markdown": "^9.0.3",
@@ -29,6 +30,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
+    "@types/lodash-es": "^4.17.12",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
     "@vitejs/plugin-react": "^4.3.4",

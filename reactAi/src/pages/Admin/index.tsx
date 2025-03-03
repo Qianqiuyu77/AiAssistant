@@ -55,7 +55,10 @@ const App = (props: AdminProps) => {
             case AdminSiderKeys.CHAT_INFORMATION:
                 return <ChatInfos messageInfos={messageInfos} />;
             case AdminSiderKeys.KNOWLEDGE_BASE_MANAGEMENT:
-                return <KnowledgeManger knowledgeBases={knowledgeBases} />;
+                return <KnowledgeManger
+                    knowledgeBases={knowledgeBases}
+                    fetchGetKnowledgeBases={fetchGetKnowledgeBases}
+                />;
             case AdminSiderKeys.FEEDBACK_INFORMATION:
                 return <FeedBack />;
             case AdminSiderKeys.ADD_KNOWLEDGE_BASE:

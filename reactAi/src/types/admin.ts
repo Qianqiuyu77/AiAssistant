@@ -54,7 +54,20 @@ export interface AdminKnowledgeBase {
     knowledgebaseNameSimple: string
     knowledgebaseInfo: string
     knowledgeIcon: string
-    ownerId: number
+    ownerId?: number
     createdAt?: number
+}
 
+export interface ChunksData {
+    file: File;
+    chunkSize: number;
+    chunkOverlap: number;
+    humanSplit: boolean;
+}
+
+export interface AddKnowledgeData extends ChunksData {
+    knowledgebaseName: string;
+    knowledgebaseIntroduce: string;
+    knowledgebaseNameCN: string;
+    knowledgebaseIcon: string;
 }
