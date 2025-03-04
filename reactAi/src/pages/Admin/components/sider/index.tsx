@@ -1,6 +1,6 @@
 import {
     AppstoreOutlined,
-    ContainerOutlined,
+    // ContainerOutlined,
     DesktopOutlined,
     MailOutlined,
     MenuFoldOutlined,
@@ -39,7 +39,7 @@ const Sider = (props: SiderProps) => {
                 { key: AdminSiderKeys.ADD_KNOWLEDGE_BASE, label: '新增知识库' },
             ]
         },
-        { key: AdminSiderKeys.LOG_MANAGEMENT, icon: <ContainerOutlined />, label: '日志管理' },
+        // { key: AdminSiderKeys.LOG_MANAGEMENT, icon: <ContainerOutlined />, label: '日志管理' },
         // { key: AdminSiderKeys.FEEDBACK_INFORMATION, icon: <AppstoreOutlined />, label: '反馈信息', },
     ];
 
