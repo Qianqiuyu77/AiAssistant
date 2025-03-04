@@ -278,3 +278,19 @@ export async function previewChunks(token: string, chunksData: ChunksData): Prom
         throw new Error("Failed to preview chunks");
     }
 }
+
+export async function uploadImage(token: string, formData: FormData): Promise<IResponse<string>> {
+    try {
+        const res = await axios.post(`${host}/uploadImage`, formData, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "multipart/form-data"
+            }
+        });
+
+        return res.data;
+    } catch (err) {
+        console.error(err);
+        throw new Error("Failed to uploadImage");
+    }
+}

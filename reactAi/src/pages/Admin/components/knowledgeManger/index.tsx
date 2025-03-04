@@ -146,6 +146,7 @@ const KnowledgeManger = (props: KnowledgeBaseProps) => {
             title: "操作",
             key: "resetPassword",
             align: "center",
+            width: 150,
             render: (_, record) => (
                 (
                     <div className="table-operation">
