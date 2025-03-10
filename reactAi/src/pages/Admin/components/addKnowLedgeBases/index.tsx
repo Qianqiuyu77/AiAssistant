@@ -123,7 +123,7 @@ const AddKnowLedgeBases = () => {
                 </p>
             </div>
 
-            <Form layout="vertical" className="knowledge-form" form={form} onFinish={handleEditSubmit} preserve={false}>
+            <Form layout="vertical" className="knowledge-form" form={form} preserve={false}>
 
                 <Form.Item label="知识库文本">
                     <TextArea
@@ -277,7 +277,6 @@ const AddKnowLedgeBases = () => {
                         onClick={handleEditSubmit}
                         loading={confirmLoading}
                         className="submit-btn"
-                        htmlType="submit"
                         disabled={!text.trim() && !dataFile.name}
                     >
                         新建知识库
