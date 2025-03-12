@@ -1,5 +1,5 @@
 import { InfoCircleOutlined, UploadOutlined } from "@ant-design/icons";
-import { Alert, Button, Card, Col, Divider, Form, Input, InputNumber, InputNumberProps, message, Row, Slider, Switch, Tooltip, Upload } from "antd";
+import { Alert, Button, Card, Col, Divider, Form, Input, InputNumber, InputNumberProps, message, Row, Slider, Spin, Switch, Tooltip, Upload } from "antd";
 import "./index.scss";
 import TextArea from "antd/es/input/TextArea";
 import { useCallback, useState } from "react";
@@ -9,11 +9,12 @@ import { useFileUploader, useTextSplitter } from "./hooks";
 
 const AddKnowLedgeBases = () => {
     const baseState = useBaseStore();
-    const [chunkSize, setchunkSize] = useState(100);
-    const [chunkOverlap, setchunkOverlap] = useState(20);
+    const [chunkSize, setchunkSize] = useState<number>(100);
+    const [chunkOverlap, setchunkOverlap] = useState<number>(20);
     const [humanSplit, setHumanSplit] = useState<boolean>(false);
     const [text, setText] = useState<string>("");
     const [form] = Form.useForm();
+    const [spinning, setSpinning] = useState<boolean>(false);
 
     const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
     const { knowProps, imgProps, dataFile, img, clearFile } = useFileUploader();
@@ -64,6 +65,7 @@ const AddKnowLedgeBases = () => {
                 return;
             }
             setConfirmLoading(true);
+            setSpinning(true);
             const blob = new Blob([text], { type: "text/plain" });
             const file = dataFile.name ? dataFile : new File([blob], "file.txt", { type: "text/plain" });
 
@@ -83,6 +85,7 @@ const AddKnowLedgeBases = () => {
             setConfirmLoading(false);
 
             if (res.data) {
+                setSpinning(false);
                 message.success("知识库新建成功");
                 form.resetFields();
                 setText("");
@@ -113,6 +116,7 @@ const AddKnowLedgeBases = () => {
             bordered={false}
             className="knowledge-card"
         >
+            <Spin spinning={spinning} fullscreen />
             <div className="guide-section">
                 <h1>✂️ 📖 文本切分可视化 && 新建知识库</h1>
                 <p className="guide-text">

@@ -21,6 +21,7 @@ export const useFileUploader = () => {
     //     // 限制图片格式和大小
     const beforeUpload = (file: File) => {
         const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
+
         const isLt2M = file.size / 1024 / 1024 < 2;
         return isJpgOrPng && isLt2M;
     };
@@ -47,6 +48,7 @@ export const useFileUploader = () => {
             const formData = new FormData();
             formData.append('image', file);
             if (!beforeUpload(file as File)) {
+                message.error('文件格式不正确')
                 onError?.(new Error('文件格式不正确'));
                 return
             }
