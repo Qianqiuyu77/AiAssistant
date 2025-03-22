@@ -107,7 +107,7 @@ const UserManger = (props: UserMangerProps) => {
                 title="用户管理"
                 bordered={false}
                 extra={
-                    <Tooltip title="指标说明">
+                    <Tooltip title="用户管理">
                         <InfoCircleOutlined />
                     </Tooltip>
                 }

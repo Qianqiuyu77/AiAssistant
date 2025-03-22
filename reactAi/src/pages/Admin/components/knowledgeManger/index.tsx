@@ -229,7 +229,7 @@ const KnowledgeManger = (props: KnowledgeBaseProps) => {
                         bordered={false}
                         style={{ width: "100%", marginBottom: "20px", boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.2)" }}
                         extra={
-                            <Tooltip title="指标说明">
+                            <Tooltip title="知识库管理">
                                 <InfoCircleOutlined />
                             </Tooltip>
                         }

@@ -47,7 +47,7 @@ const Dashboard = (props: DashBoardProps) => {
                     title="活跃用户数量"
                     style={{ height: '100%' }}
                     extra={
-                        <Tooltip title="指标说明">
+                        <Tooltip title="30天内登陆过的用户">
                             <InfoCircleOutlined />
                         </Tooltip>
                     }>
@@ -60,7 +60,7 @@ const Dashboard = (props: DashBoardProps) => {
                     title="总对话次数"
                     style={{ height: '100%' }}
                     extra={
-                        <Tooltip title="指标说明">
+                        <Tooltip title="系统内所有对话次数">
                             <InfoCircleOutlined />
                         </Tooltip>
                     }
@@ -74,7 +74,7 @@ const Dashboard = (props: DashBoardProps) => {
                     title="三十天对话平均分数"
                     style={{ height: '100%' }}
                     extra={
-                        <Tooltip title="指标说明">
+                        <Tooltip title="三十天内所有使用知识库的评分平均数">
                             <InfoCircleOutlined />
                         </Tooltip>
                     }>
@@ -91,7 +91,7 @@ const Dashboard = (props: DashBoardProps) => {
                     title="用户总量"
                     style={{ height: '100%' }}
                     extra={
-                        <Tooltip title="指标说明">
+                        <Tooltip title="系统内所有用户数量">
                             <InfoCircleOutlined />
                         </Tooltip>
                     }
@@ -106,7 +106,7 @@ const Dashboard = (props: DashBoardProps) => {
                     title="三十天对话得分"
                     style={{ height: '100%' }}
                     extra={
-                        <Tooltip title="指标说明">
+                        <Tooltip title="三十天内每天的评分">
                             <InfoCircleOutlined />
                         </Tooltip>
                     }
@@ -122,7 +122,7 @@ const Dashboard = (props: DashBoardProps) => {
                     title="知识库使用得分"
                     style={{ height: '100%' }}
                     extra={
-                        <Tooltip title="指标说明">
+                        <Tooltip title="知识库使用得分排名">
                             <InfoCircleOutlined />
                         </Tooltip>
                     }
@@ -149,7 +149,7 @@ const Dashboard = (props: DashBoardProps) => {
                     title="知识库使用占比"
                     style={{ height: '100%' }}
                     extra={
-                        <Tooltip title="指标说明">
+                        <Tooltip title="系统知识库使用占比">
                             <InfoCircleOutlined />
                         </Tooltip>
                     }
@@ -168,7 +168,7 @@ const Dashboard = (props: DashBoardProps) => {
                     title="三十天问答次数"
                     style={{ height: '100%' }}
                     extra={
-                        <Tooltip title="指标说明">
+                        <Tooltip title="三十天系统问答次数">
                             <InfoCircleOutlined />
                         </Tooltip>
                     }

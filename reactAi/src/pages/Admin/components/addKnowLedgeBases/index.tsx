@@ -177,7 +177,7 @@ const AddKnowLedgeBases = () => {
                         <Col span={6}>
                             <InputNumber
                                 min={0}
-                                max={500}
+                                max={1000}
                                 value={chunkSize}
                                 onChange={onChangeChunkSize}
                                 className="slider-input"
