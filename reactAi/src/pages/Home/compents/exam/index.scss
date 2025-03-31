@@ -1,0 +1,19 @@
+.examContainer{
+    width: 70rem;
+    height: 50rem;
+    font-size: 1.2rem;
+    overflow-y: scroll;
+}
+
+.examContainer::-webkit-scrollbar {
+    width: 10px; /* 设置滚动条宽度 */
+}
+
+.examContainer::-webkit-scrollbar-thumb {
+    background: #5d65f8; /* 滚动条滑块颜色 */
+    border-radius: 5px; /* 使滚动条圆角 */
+}
+
+.examContainer::-webkit-scrollbar-track {
+    background: #f1f1f1; /* 滚动条轨道颜色 */
+}

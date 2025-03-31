@@ -8,6 +8,7 @@ import { deleteConversation, getChat, renameConversation } from "../../api";
 import { bus } from "../../bus";
 import SiderBar from "./compents/siderBar";
 import Header from "../../component/header";
+import Exam from "./compents/exam";
 
 interface HomeProps {
     chatInfos: ChatInfo[];
@@ -28,9 +29,15 @@ const App = (homeProps: HomeProps) => {
 
     const [currentKnowledgeBaseId, setCurrentKnowledgeBaseId] = useState<number>(0);
 
+    const [isExamOpen, setIsExamOpen] = useState<boolean>(false);
+
     const getChatInfoByCid = () => {
         // 根据conversationId获取chatInfo
         return chatInfos.find((chatInfo) => chatInfo.conversationId === currentCid) || defaultChatInfo;
+    }
+
+    const exitExam = () => {
+        setIsExamOpen(false);
     }
 
     const openNewConversation = () => {
@@ -47,9 +54,13 @@ const App = (homeProps: HomeProps) => {
         setCurrentCid(conversationId);
     }
 
-    const createNewKnowledgeBase = () => {
-        showNotification('创建新知识库', true);
-        console.log('创建新知识库')
+    const openExam = () => {
+        if (currentCid === -1) {
+            showNotification('请先创建对话或者打开历史对话', false);
+            return;
+        }
+        console.log('创建新试卷')
+        setIsExamOpen(true);
     }
 
     const clickKnowledgeBase = (knowledgeBaseId: number) => {
@@ -128,54 +139,68 @@ const App = (homeProps: HomeProps) => {
 
 
     return (
-        <div className="homeContainer">
-            <Header
-                userName={userName}
-            />
-            <div className="mainContent">
-                <div className="siderBar">
-                    <SiderBar
-                        knowledgeBaseList={knowledgeBases}
-                        currentKnowledgeBaseId={currentKnowledgeBaseId}
-                        clickKnowledgeBase={clickKnowledgeBase}
-                    />
-                    <div
-                        className="newKnowledgeBaseButton"
-                        onClick={() => createNewKnowledgeBase()}
-                    >
-                        <img src="src/images/新建.png" />
+        <>
+            <div className="homeContainer">
+                <Header
+                    userName={userName}
+                />
+                <div className="mainContent">
+                    <div className="siderBar">
+                        <SiderBar
+                            knowledgeBaseList={knowledgeBases}
+                            currentKnowledgeBaseId={currentKnowledgeBaseId}
+                            clickKnowledgeBase={clickKnowledgeBase}
+                        />
                         <div
-                            className="newKnowledgeText"
+                            className="newKnowledgeBaseButton"
+                            onClick={() => openExam()}
                         >
-                            新增知识库
+                            <img src="src/images/新建.png" />
+                            <div
+                                className="newKnowledgeText"
+                            >
+                                生成试卷
+                            </div>
+                        </div>
+                    </div>
+                    <div className="chatBox">
+                        <div className="conversationListContainer">
+                            <ConversationList
+                                chatInfos={chatInfos}
+                                currentCid={currentCid}
+                                openHistoryConversation={openHistoryConversation}
+                                openNewConversation={openNewConversation}
+                                renameConversation={clickRenameConversation}
+                                deleteConversation={clickDeleteConversation}
+                            />
+                        </div>
+                        <div className="chatWindow">
+                            <ChatWindow
+                                chatInfo={getChatInfoByCid()}
+                                fetchGetAnswer={fetchGetAnswer}
+                                currentCid={currentCid}
+                                getChatInfos={getChatInfos}
+                                openHistoryConversation={openHistoryConversation}
+                                currentKnowledgeBaseId={currentKnowledgeBaseId}
+                            />
                         </div>
                     </div>
                 </div>
-                <div className="chatBox">
-                    <div className="conversationListContainer">
-                        <ConversationList
-                            chatInfos={chatInfos}
-                            currentCid={currentCid}
-                            openHistoryConversation={openHistoryConversation}
-                            openNewConversation={openNewConversation}
-                            renameConversation={clickRenameConversation}
-                            deleteConversation={clickDeleteConversation}
-                        />
-                    </div>
-                    <div className="chatWindow">
-                        <ChatWindow
-                            chatInfo={getChatInfoByCid()}
-                            fetchGetAnswer={fetchGetAnswer}
-                            currentCid={currentCid}
-                            getChatInfos={getChatInfos}
-                            openHistoryConversation={openHistoryConversation}
-                            currentKnowledgeBaseId={currentKnowledgeBaseId}
-                        />
-                    </div>
-                </div>
-            </div>
 
-        </div>
+            </div>
+            {
+                isExamOpen &&
+                <div className="shadowBox">
+                    <Exam
+                        conversationId={currentCid}
+                        setExamclose={exitExam}
+                    />
+                </div>
+            }
+
+
+        </>
+
     );
 }
 

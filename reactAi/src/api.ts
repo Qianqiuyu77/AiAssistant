@@ -2,6 +2,7 @@ import axios from 'axios';
 import { IResponse } from './types/utils';
 import { AddKnowledgeData, AdminKnowledgeBase, ChunksData, EcharsData, UserChatInfos, UserData } from './types/admin';
 import { MessageType } from './types/chat';
+import { Paper } from './types/exam';
 
 const host = 'http://localhost:5000'
 
@@ -292,5 +293,22 @@ export async function uploadImage(token: string, formData: FormData): Promise<IR
     } catch (err) {
         console.error(err);
         throw new Error("Failed to uploadImage");
+    }
+}
+
+// 试卷
+export async function getPaper(conversationId: number, options?: { signal?: AbortSignal }): Promise<IResponse<Paper>> {
+    try {
+        const res = await axios.get(`${host}/getPaper`, {
+            params: { conversationId },
+            signal: options?.signal, // 传入 AbortSignal
+        });
+        return res.data;
+    } catch (err) {
+        if (axios.isCancel(err)) {
+            throw err;
+        }
+        console.error(err);
+        throw err;
     }
 }
