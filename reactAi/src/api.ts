@@ -312,3 +312,18 @@ export async function getPaper(conversationId: number, options?: { signal?: Abor
         throw err;
     }
 }
+
+export async function comitPaper(userId: number, conversationId: number, score: number = 0): Promise<IResponse<boolean>> {
+    try {
+        const res = await axios.post(`${host}/comitPaper`, {
+            userId,
+            conversationId,
+            score
+        });
+
+        return res.data;
+    } catch (err) {
+        console.error(err);
+        throw new Error("Failed to preview chunks");
+    }
+}

@@ -4,6 +4,7 @@ export enum QuestionType {
 }
 
 export enum ExamStep {
+    errorStep = -1,
     initStep = 0,
     examStep = 1,
     resultStep = 2,

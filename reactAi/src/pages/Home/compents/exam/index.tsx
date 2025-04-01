@@ -2,10 +2,11 @@ import { useEffect, useRef, useState } from 'react';
 
 import './index.scss';
 import { Button, Card, message, Progress, Radio, RadioChangeEvent, Result } from 'antd';
-import { CloseCircleOutlined, MehFilled, SmileOutlined } from '@ant-design/icons';
-import { getPaper } from '../../../../api';
+import { CloseCircleOutlined, FrownFilled, SmileOutlined } from '@ant-design/icons';
+import { comitPaper, getPaper } from '../../../../api';
 import { ExamStep, Question } from '../../../../types/exam';
 import axios from 'axios';
+import useBaseStore from '../../../../../zustand/baseStore';
 
 interface ExamProps {
     conversationId: number;
@@ -14,18 +15,18 @@ interface ExamProps {
 
 
 const Exam = (props: ExamProps) => {
+
+    const userId = useBaseStore().userId;
     const { conversationId, setExamclose } = props;
     const [questionList, setQuestionList] = useState<Question[]>([]);
     // 组件状态
     const [userAnswers, setUserAnswers] = useState<string[]>(Array(questionList.length).fill("A"));
-    const [submitted, setSubmitted] = useState(false);
     const [step, setStep] = useState(ExamStep.initStep);
     const [process, setProcess] = useState(0);
     const score = useRef<number>(0);
     const controllerRef = useRef<AbortController | null>(null);
-
-
     const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
 
 
     const onChange = (e: RadioChangeEvent, index: number) => {
@@ -50,20 +51,20 @@ const Exam = (props: ExamProps) => {
     };
 
     const onSubmit = () => {
-        setSubmitted(true);
         score.current = calculateScore()
         setStep(ExamStep.resultStep);
+        comitPaper(userId, conversationId, score.current);
     }
 
     const onSuccessRetry = () => {
-        setSubmitted(false);
+        score.current = 0;
         setStep(ExamStep.initStep);
         setProcess(0);
         getPaperData();
     }
 
     const onFailRetry = () => {
-        setSubmitted(false);
+        score.current = 0;
         setStep(ExamStep.examStep);
     }
 
@@ -78,15 +79,18 @@ const Exam = (props: ExamProps) => {
             if (res.data) {
                 setQuestionList(res.data?.questions || [])
             } else {
-                message.error(res.msg || "获取试卷失败")
+                throw new Error("试卷格式有误")
             }
 
         } catch (err) {
+            console.log(err);
+
             if (axios.isCancel(err)) {
                 message.info("生成已被取消");
             } else {
                 console.error("获取试卷失败:", err);
                 message.error("获取试卷失败");
+                throw new Error("获取试卷失败")
             }
         }
     }
@@ -126,12 +130,16 @@ const Exam = (props: ExamProps) => {
         }, Math.random() * 1000 + 1000); // 每 400-1400ms 触发一次
 
         // **获取真实试卷数据**
-        fetchGetPaper(conversationId, controllerRef.current).finally(() => {
+        fetchGetPaper(conversationId, controllerRef.current).then(() => {
+            setProcess(100);
+            setTimeout(() => setStep(ExamStep.examStep), 1000);
+        }).catch(() => {
+            setProcess(0);
+            setStep(ExamStep.errorStep);
+        }).finally(() => {
             if (intervalRef.current) {
                 clearInterval(intervalRef.current);
             }
-            setProcess(100);
-            setTimeout(() => setStep(ExamStep.examStep), 1000);
         });
     }
 
@@ -151,7 +159,7 @@ const Exam = (props: ExamProps) => {
 
     useEffect(() => {
         setUserAnswers(Array(questionList.length).fill("A"));
-    }, [questionList.length]);
+    }, [questionList]);
 
 
     const style: React.CSSProperties = {
@@ -170,41 +178,44 @@ const Exam = (props: ExamProps) => {
                 />
             }
             {
+                step === ExamStep.errorStep &&
+                <Result
+                    status="warning"
+                    title="试卷被风吹走啦，请重新加载吧"
+                    extra={
+                        <Button onClick={onSuccessRetry}>
+                            重新加载
+                        </Button>
+                    }
+                />
+            }
+            {
                 step === ExamStep.examStep && <div className="examContainer">
-                    {questionList.map(
-                        (item, index) =>
-                            <div key={index}>
-                                <div>{(index + 1) + ". " + item.stem}</div>
-                                <div>
-                                    <Radio.Group
-                                        style={style}
-                                        onChange={(e) => { onChange(e, index) }}
-                                        value={userAnswers[index]}
-                                        options={[
-                                            { value: "A", label: "A. " + item.options.A },
-                                            { value: "B", label: "B. " + item.options.B },
-                                            { value: "C", label: "C. " + item.options.C },
-                                            { value: "D", label: "D. " + item.options.D },
-                                        ]}
-                                    />
-                                </div>
-                                {
-                                    submitted && <div>
-                                        {
-                                            item.answer
-                                        }
-                                        {
-                                            item.analysis
-                                        }
+                    <div className='paperContainer'>
+                        {questionList.map(
+                            (item, index) =>
+                                <div className='questionItem' key={index}>
+                                    <div className='questionTitle'>{(index + 1) + ". " + item.stem}</div>
+                                    <div className='questionOptions'>
+                                        <Radio.Group
+                                            style={style}
+                                            onChange={(e) => { onChange(e, index) }}
+                                            value={userAnswers[index]}
+                                            options={[
+                                                { value: "A", label: "A. " + item.options.A },
+                                                { value: "B", label: "B. " + item.options.B },
+                                                { value: "C", label: "C. " + item.options.C },
+                                                { value: "D", label: "D. " + item.options.D },
+                                            ]}
+                                        />
                                     </div>
-                                }
+                                </div>
+                        )}
+                    </div>
 
-
-                            </div>
-                    )}
-                    <div>
+                    <div className='submitBtn'>
                         {
-                            !submitted && <Button onClick={onSubmit} type="primary" >
+                            <Button style={{ width: 100, height: 40, backgroundColor: 'rgb(93, 101, 248)' }} onClick={onSubmit} type="primary" >
                                 提交
                             </Button>
                         }
@@ -218,6 +229,14 @@ const Exam = (props: ExamProps) => {
                         <Result
                             icon={<SmileOutlined />}
                             title="很棒! 你已经掌握了这些知识点"
+                            subTitle={
+                                <div >
+                                    "你的得分是"
+                                    <span className='score'> {score.current} </span>
+                                    "分"
+                                </div>
+
+                            }
                             extra={
                                 <>
                                     <Button onClick={onBack} >查看解析</Button>
@@ -227,8 +246,15 @@ const Exam = (props: ExamProps) => {
                             }
                         /> :
                         <Result
-                            icon={<MehFilled />}
+                            icon={<FrownFilled />}
                             title="很遗憾! 你还没有掌握这些知识点"
+                            subTitle={
+                                <div >
+                                    你的得分是
+                                    <span className='score'>{score.current}  </span>
+                                    分
+                                </div>
+                            }
                             extra={
                                 <>
                                     <Button onClick={onBack} >查看解析</Button>
@@ -241,38 +267,44 @@ const Exam = (props: ExamProps) => {
             }
             {
                 step === ExamStep.answerStep && <div className="examContainer">
-                    {questionList.map(
-                        (item, index) =>
-                            <div key={index}>
-                                <div>{(index + 1) + ". " + item.stem}</div>
-                                <div>
-                                    <Radio.Group
-                                        style={style}
-                                        onChange={(e) => { onChange(e, index) }}
-                                        value={userAnswers[index]}
-                                        disabled
-                                        options={[
-                                            { value: "A", label: "A. " + item.options.A },
-                                            { value: "B", label: "B. " + item.options.B },
-                                            { value: "C", label: "C. " + item.options.C },
-                                            { value: "D", label: "D. " + item.options.D },
-                                        ]}
-                                    />
-                                </div>
-                                {
-                                    <div>
-                                        {
-                                            "正确答案：" + item.answer + item.analysis
-                                        }
+                    <div className='paperContainer'>
+                        {questionList.map(
+                            (item, index) =>
+                                <div className='questionItem' key={index}>
+                                    <div className='questionTitle'>{(index + 1) + ". " + item.stem}</div>
+                                    <div className='questionOptions'>
+                                        <Radio.Group
+                                            style={style}
+                                            onChange={(e) => { onChange(e, index) }}
+                                            value={userAnswers[index]}
+                                            disabled
+                                            options={[
+                                                { value: "A", label: "A. " + item.options.A },
+                                                { value: "B", label: "B. " + item.options.B },
+                                                { value: "C", label: "C. " + item.options.C },
+                                                { value: "D", label: "D. " + item.options.D },
+                                            ]}
+                                        />
                                     </div>
-                                }
+                                    {
+                                        <div className='answerAnalysis'>
+                                            <span style={{ color: item.answer === userAnswers[index] ? '#5d65f8' : '#ff4d4f' }}>{"正确答案：[" + item.answer + "]"}</span>
+                                            <br />
+                                            <span >{"解析：" + item.analysis}</span>
+                                        </div>
+                                    }
 
 
 
-                            </div>
+                                </div>
 
-                    )}
-                    <Button type="primary" onClick={onSuccessRetry}>再来一次</Button>
+                        )}
+                        <div className='againBtn'>
+                            <Button style={{ width: 100, height: 40, backgroundColor: 'rgb(93, 101, 248)' }} type="primary" onClick={onSuccessRetry}>再来一次</Button>
+                        </div>
+                    </div>
+
+
                 </div>
             }
         </Card>
