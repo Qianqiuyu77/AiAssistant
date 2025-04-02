@@ -89,6 +89,28 @@
                 .chatAnswer{
                     padding: 1rem;
                     border-radius: 0.5rem;
+                    .markdown-body{
+                        p {
+                            margin: 0;
+                        }
+                        li {
+                            padding: 0;
+                            margin: 0;
+                        }
+                        ol {
+                            display: flex;
+                            flex-direction: column;
+                            list-style: none;
+                            padding-left: 0;
+                            justify-content: flex-start;
+                        }
+                        br {
+                             display: none;
+                        }
+                        strong {
+                            font-size: 1.5rem;
+                        }
+                    }
                 }
                 .chatLoding{
                     margin-top: 0.8rem;

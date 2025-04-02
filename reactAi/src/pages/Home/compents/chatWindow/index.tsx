@@ -238,7 +238,7 @@ const ChatWindow = (chatWindowProps: ChatWindowProps) => {
                                     isLastMessage && item.content === ""
                                         ? <div className="chatLoding"><Spin /></div>
                                         : <div className="chatAnswer">
-                                            <ReactMarkdown>
+                                            <ReactMarkdown className="markdown-body">
                                                 {item.content}
                                             </ReactMarkdown>
                                         </div>
