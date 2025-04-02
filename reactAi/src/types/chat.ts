@@ -11,6 +11,7 @@ export interface ConversationInfo {
     knowledge: string
     messageId: number
     question: string
+    favourite: number
 }
 
 export interface ChatAnswer {

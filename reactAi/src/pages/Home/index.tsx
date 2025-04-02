@@ -9,6 +9,7 @@ import { bus } from "../../bus";
 import SiderBar from "./compents/siderBar";
 import Header from "../../component/header";
 import Exam from "./compents/exam";
+import ShadowBox from "../../component/shadowBox";
 
 interface HomeProps {
     chatInfos: ChatInfo[];
@@ -190,12 +191,16 @@ const App = (homeProps: HomeProps) => {
             </div>
             {
                 isExamOpen &&
-                <div className="shadowBox">
+                <ShadowBox>
                     <Exam
                         conversationId={currentCid}
                         setExamclose={exitExam}
-                    />
-                </div>
+                    ></Exam>
+                </ShadowBox>
+
+            }
+            {
+
             }
 
 

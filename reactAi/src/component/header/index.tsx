@@ -3,6 +3,8 @@ import './index.scss'
 import { useNavigate } from 'react-router-dom';
 import Dropdown, { DropdownProps } from 'antd/es/dropdown';
 import { useState } from 'react';
+import FeedBackBox from '../feedBackBox';
+import ShadowBox from '../shadowBox';
 
 interface HeaderProps {
     userName: string;
@@ -10,6 +12,9 @@ interface HeaderProps {
 const Header = (props: HeaderProps) => {
     const { userName = '' } = props;
     const navigate = useNavigate();
+
+    const [feedBackOpen, setFeedBackOpen] = useState(true);
+
 
     const items: MenuProps["items"] = [
         {
@@ -39,6 +44,10 @@ const Header = (props: HeaderProps) => {
         }
     };
 
+    const openFeedBack = () => {
+        setFeedBackOpen(true);
+    }
+
     return (
         <>
             <div className="topBar">
@@ -52,7 +61,7 @@ const Header = (props: HeaderProps) => {
                     </div>
                 </div>
                 <div className="functionalBar" >
-                    <div className="feedBack">
+                    <div className="feedBack" onClick={openFeedBack}>
                         <img src="src/images/意见反馈.png" alt="" />
                         意见反馈
                     </div>
@@ -79,6 +88,15 @@ const Header = (props: HeaderProps) => {
                     </Dropdown>
                 </div>
             </div>
+            {
+                feedBackOpen &&
+                <ShadowBox>
+                    <FeedBackBox
+                        closeFeedBack={() => setFeedBackOpen(false)}
+                    />
+                </ShadowBox>
+
+            }
         </>
 
     )

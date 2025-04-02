@@ -11,6 +11,8 @@ import type { CollapseProps } from 'antd';
 import { Collapse, theme } from 'antd';
 import { bus } from "../../../../bus";
 import ReactMarkdown from "react-markdown";
+import { giveLike } from "../../../../api";
+import { clickPaste } from "../../../../utils";
 
 interface ChatWindowProps {
     chatInfo: ChatInfo;
@@ -96,11 +98,12 @@ const ChatWindow = (chatWindowProps: ChatWindowProps) => {
     }
 
     // 创建消息对象
-    const createMessage = (question: string, content: string, knowledge: string, messageId: number) => ({
+    const createMessage = (question: string, content: string, knowledge: string, messageId: number, favourite: number = 0) => ({
         question,
         content,
         knowledge,
         messageId,
+        favourite
     });
 
     // 更新会话信息
@@ -168,6 +171,46 @@ const ChatWindow = (chatWindowProps: ChatWindowProps) => {
             rect.right <= (window.innerWidth || document.documentElement.clientWidth) // 元素的右边在视口范围内
         return !isInView;
     };
+
+    const clickGiveLike = async (isFavourite: boolean, messageId: number) => {
+        const res = await giveLike(baseState.userId, messageId, isFavourite ? 1 : 0)
+        if (res.data) {
+            getChatInfos();
+        }
+    }
+
+    const renderFavouriteIcons = (favourite: number, messageId: number) => {
+        if (favourite === 1) {
+            return (
+                <>
+                    <div className="utilsIcon">
+                        <img src="src/images/点赞.png" alt="" />
+                    </div>
+                </>
+            )
+        } else if (favourite === -1) {
+            return (
+                <>
+                    <div className="utilsIcon">
+                        <img src="src/images/差评.png" alt="" />
+                    </div>
+                </>
+            )
+        } else {
+            return (
+                <>
+                    <div className="utilsIcon" onClick={() => clickGiveLike(true, messageId)}>
+                        <img src="src/images/无点赞.png" alt="" />
+                    </div>
+                    <div className="utilsIcon" onClick={() => clickGiveLike(false, messageId)}>
+                        <img src="src/images/无差评.png" alt="" />
+                    </div>
+                </>
+            )
+        }
+    }
+
+
 
 
     useEffect(() => {
@@ -246,8 +289,18 @@ const ChatWindow = (chatWindowProps: ChatWindowProps) => {
 
                             </div>
                             {
-
-                                item.knowledge
+                                !!item.messageId
+                                && <div className="chatMessageUtilContainer">
+                                    <div className="utilsIcon" onClick={() => clickPaste(item.content)}>
+                                        <img src="src\images\复制.png" alt="复制文本" />
+                                    </div>
+                                    {
+                                        renderFavouriteIcons(item.favourite, item.messageId)
+                                    }
+                                </div>
+                            }
+                            {
+                                !!item.knowledge
                                 &&
                                 <div className="chatKnowledgeContainer">
                                     <Collapse

@@ -327,3 +327,16 @@ export async function comitPaper(userId: number, conversationId: number, score: 
         throw new Error("Failed to preview chunks");
     }
 }
+
+export async function giveLike(userId: number, messageId: number, isFavourite: number): Promise<IResponse<boolean>> {
+    try {
+        const res = await axios.get(`${host}/giveLike`, {
+            params: { userId, messageId, isFavourite }
+        });
+        return res.data;
+    } catch (err) {
+        console.error(err);
+        throw err;
+    }
+
+}

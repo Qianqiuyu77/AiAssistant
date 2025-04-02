@@ -107,9 +107,6 @@
                         br {
                              display: none;
                         }
-                        strong {
-                            font-size: 1.5rem;
-                        }
                     }
                 }
                 .chatLoding{
@@ -117,6 +114,35 @@
                     margin-left: 1rem;
                 }
             }
+            .chatMessageUtilContainer{
+                width: 90%;
+                // background-color: red;
+                display: flex;
+                justify-content: flex-start;
+                margin-bottom: 1rem;
+                .utilsIcon{
+                    width: 1.4rem;
+                    height: 1.4rem;
+                    cursor: pointer;
+                    border-radius: 0.5rem;
+                    padding: 0.3rem;
+                    img {
+                        width: 100%;
+                        height: 100%;
+                    }
+                }
+                .utilsIcon:hover{
+                    background-color: #dedee8;
+                }
+                .chatKnowledgeContainer{
+                    color: #fff;
+                    width: 90%;
+                    display: flex;
+                    justify-content: flex-start;
+                }
+
+            }
+
             .chatKnowledgeContainer{
                 color: #fff;
                 width: 90%;
