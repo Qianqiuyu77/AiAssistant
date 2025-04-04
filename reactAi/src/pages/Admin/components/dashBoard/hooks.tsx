@@ -20,6 +20,12 @@ export const useMakeEcharsData = (ichartData: IChartData) => {
     const totalScore = nonZeroScores.reduce((acc, score) => acc + score, 0);
     const avgScoreValue = nonZeroScores.length > 0 ? totalScore / nonZeroScores.length : 0; // 避免除以 0
 
+    //计算考试平均分
+    const noZeroExamScores = echarsData.examCount.filter(score => score > 0); // 过滤掉 0 分
+    console.log(noZeroExamScores);
+
+    const examTotalScore = noZeroExamScores.reduce((acc, score) => acc + score, 0);
+    const examAvgScoreValue = noZeroExamScores.length > 0 ? examTotalScore / noZeroExamScores.length : 0; // 避免除以 0
 
     const avgData = echarsData.avgScore.map((score, index) => ({
         index: `第 ${index + 1} 天`, // X 轴标签
@@ -27,6 +33,11 @@ export const useMakeEcharsData = (ichartData: IChartData) => {
     }));
 
     const chatNumberData = echarsData.messageCount.map((count, index) => ({
+        index: `第 ${index + 1} 天`, // X 轴标签
+        count: count, // Y 轴值
+    }))
+
+    const examNumberData = echarsData.examCount.map((count, index) => ({
         index: `第 ${index + 1} 天`, // X 轴标签
         count: count, // Y 轴值
     }))
@@ -54,6 +65,20 @@ export const useMakeEcharsData = (ichartData: IChartData) => {
 
     const chatNumberConfig = {
         data: chatNumberData,
+        xField: "index",  // X 轴
+        yField: "count",  // Y 轴
+        label: {
+            style: { fill: "#FFFFFF" },
+        },
+        height: 300,
+        maxColumnWidth: 40,
+        color: ['#5d65f8'], // 统一颜色
+        xAxis: { label: { autoHide: true, autoRotate: false } },
+        yAxis: { min: 0, max: 100 },
+    }
+
+    const examNumberConfig = {
+        data: examNumberData,
         xField: "index",  // X 轴
         yField: "count",  // Y 轴
         label: {
@@ -122,6 +147,8 @@ export const useMakeEcharsData = (ichartData: IChartData) => {
         chatNumberConfig,
         knowledgeCountConfig,
         sortedData,
-        columns
+        columns,
+        examNumberConfig,
+        examAvgScoreValue,
     }
 }

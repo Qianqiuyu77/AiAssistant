@@ -13,6 +13,7 @@ import ChatInfos from "./components/chatInfos";
 import KnowledgeManger from "./components/knowledgeManger";
 import FeedBack from "./components/feedBack";
 import AddKnowLedgeBases from "./components/addKnowLedgeBases";
+import { FeedbackInfo } from "../../types/feedback";
 
 interface AdminProps {
     echarsData: EcharsData;
@@ -20,10 +21,12 @@ interface AdminProps {
     userDatas: UserData[];
     messageInfos: MessageType[];
     knowledgeBases: AdminKnowledgeBase[];
+    feedBackInfos: FeedbackInfo[];
     fetchGetAllMessages: () => void;
     fetchGetEcharsData: () => void;
     fetchGetUserData: () => void;
     fetchGetKnowledgeBases: () => void;
+    fetchGetFeedbacks: () => void;
 }
 
 const App = (props: AdminProps) => {
@@ -33,10 +36,12 @@ const App = (props: AdminProps) => {
         userDatas,
         knowledgeBases,
         messageInfos,
+        feedBackInfos,
         fetchGetAllMessages,
         fetchGetKnowledgeBases,
         fetchGetEcharsData,
-        fetchGetUserData
+        fetchGetUserData,
+        fetchGetFeedbacks
     } = props;
     const [selectKey, setSelectKey] = useState<number>(AdminSiderKeys.DASHBOARD_DATA)
 
@@ -60,7 +65,7 @@ const App = (props: AdminProps) => {
                     fetchGetKnowledgeBases={fetchGetKnowledgeBases}
                 />;
             case AdminSiderKeys.FEEDBACK_INFORMATION:
-                return <FeedBack />;
+                return <FeedBack feedBackInfos={feedBackInfos} />;
             case AdminSiderKeys.ADD_KNOWLEDGE_BASE:
                 return <AddKnowLedgeBases />
             default:
@@ -82,6 +87,9 @@ const App = (props: AdminProps) => {
             case AdminSiderKeys.KNOWLEDGE_BASE_MANAGEMENT:
                 fetchGetKnowledgeBases();
                 break;
+            case AdminSiderKeys.FEEDBACK_INFORMATION:
+                fetchGetFeedbacks();
+                break;
         }
     }, [selectKey])
 
@@ -92,9 +100,6 @@ const App = (props: AdminProps) => {
                 <Sider handleSiderBarClick={handleSiderBarClick} />
                 <div className="adminPageContent" >
                     {renderContent()}
-                    {/* <div className="adminPageContentFooter">
-                        designed by <a href="https://github.com/Qianqiuyu77" target="_blank">qianqiuyu77</a>
-                    </div> */}
                 </div>
             </div>
 

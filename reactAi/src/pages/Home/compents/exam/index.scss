@@ -1,0 +1,53 @@
+.examContainer{
+    width: 70rem;
+    height: 50rem;
+    font-size: 1.2rem;
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    .paperContainer{
+        padding-left: 5rem;
+        // background-color: pink;
+        .questionItem{
+           
+            margin-bottom: 2rem;
+            .questionTitle{
+                font-size: 1.5rem;
+                font-weight: bold;
+                margin-bottom: 1rem;
+            }
+            .questionOptions{
+                margin-left: 2rem;
+                margin-bottom: 1rem;
+                font-size: 1rem;
+        }
+    }
+    
+    }
+    .submitBtn{
+        position: absolute;
+        right: 5rem;
+        bottom: 5rem;
+    }
+    .againBtn{
+        float: right;
+    }
+    .score{
+        color: red !important;
+    }
+}
+
+.examContainer::-webkit-scrollbar {
+    width: 10px; /* 设置滚动条宽度 */
+}
+
+.examContainer::-webkit-scrollbar-thumb {
+    background: rgb(93, 101, 248,0.5); /* 滚动条滑块颜色 */
+    border-radius: 5px; /* 使滚动条圆角 */
+}
+
+.examContainer::-webkit-scrollbar-track {
+    background: #f1f1f1; /* 滚动条轨道颜色 */
+}

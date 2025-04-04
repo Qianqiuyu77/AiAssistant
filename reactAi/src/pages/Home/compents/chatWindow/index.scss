@@ -89,12 +89,61 @@
                 .chatAnswer{
                     padding: 1rem;
                     border-radius: 0.5rem;
+                    .markdown-body{
+                        p {
+                            margin: 0;
+                        }
+                        li {
+                            padding: 0;
+                            margin: 0;
+                        }
+                        ol {
+                            display: flex;
+                            flex-direction: column;
+                            list-style: none;
+                            padding-left: 0;
+                            justify-content: flex-start;
+                        }
+                        br {
+                             display: none;
+                        }
+                    }
                 }
                 .chatLoding{
                     margin-top: 0.8rem;
                     margin-left: 1rem;
                 }
             }
+            .chatMessageUtilContainer{
+                width: 90%;
+                // background-color: red;
+                display: flex;
+                justify-content: flex-start;
+                margin-bottom: 1rem;
+                .utilsIcon{
+                    width: 1.4rem;
+                    height: 1.4rem;
+                    margin-right: 0.3rem;
+                    cursor: pointer;
+                    border-radius: 0.5rem;
+                    padding: 0.3rem;
+                    img {
+                        width: 100%;
+                        height: 100%;
+                    }
+                }
+                .utilsIcon:hover{
+                    background-color: #dedee8;
+                }
+                .chatKnowledgeContainer{
+                    color: #fff;
+                    width: 90%;
+                    display: flex;
+                    justify-content: flex-start;
+                }
+
+            }
+
             .chatKnowledgeContainer{
                 color: #fff;
                 width: 90%;

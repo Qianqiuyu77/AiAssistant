@@ -33,6 +33,17 @@ export interface EcharsData {
     messageCount: number[];
     avgScore: number[];
     knowledgeBasesData: KnowledgeBaseType[];
+    examCount: number[];
+    totalExamCount: number;
+    avgExamScore: number;
+    highestExam: ExamUserInfo;
+    lowestExam: ExamUserInfo;
+}
+
+export interface ExamUserInfo {
+    userId: number;
+    score: number;
+    conversationId: number;
 }
 
 export interface UserData {

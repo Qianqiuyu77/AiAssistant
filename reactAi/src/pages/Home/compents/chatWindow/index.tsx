@@ -1,9 +1,9 @@
 import { OpenAIOutlined, PaperClipOutlined } from "@ant-design/icons";
-import { ChatAnswer, ChatInfo, ChatState, ConversationInfo } from "../../../../types/chat";
+import { ChatInfo, ChatState, ConversationInfo } from "../../../../types/chat";
 import "./index.scss";
 import { SetStateAction, useEffect, useRef, useState } from "react";
 import useBaseStore from "../../../../../zustand/baseStore";
-import { Spin, Switch } from "antd";
+import { message, Spin, Switch } from "antd";
 import type { CSSProperties } from 'react';
 import React from 'react';
 import { CaretRightOutlined } from '@ant-design/icons';
@@ -11,12 +11,13 @@ import type { CollapseProps } from 'antd';
 import { Collapse, theme } from 'antd';
 import { bus } from "../../../../bus";
 import ReactMarkdown from "react-markdown";
+import { getChat, giveLike } from "../../../../api";
+import { clickPaste } from "../../../../utils";
 
 interface ChatWindowProps {
     chatInfo: ChatInfo;
     currentCid: number;
     currentKnowledgeBaseId: number;
-    fetchGetAnswer: (question: string, canUseRAG: number, currentKnowledgeBaseId: number, conversationId?: number) => Promise<ChatAnswer>;
     getChatInfos: () => void;
     openHistoryConversation: (conversationId: number) => void;
 }
@@ -26,7 +27,7 @@ const LIMIT_INPUT = 300;
 const ChatWindow = (chatWindowProps: ChatWindowProps) => {
     const baseState = useBaseStore();
 
-    const { chatInfo, fetchGetAnswer, currentCid, currentKnowledgeBaseId, getChatInfos, openHistoryConversation } = chatWindowProps;
+    const { chatInfo, currentCid, currentKnowledgeBaseId, getChatInfos, openHistoryConversation } = chatWindowProps;
 
     const [inputValue, setInputValue] = useState<string>("");
 
@@ -48,7 +49,7 @@ const ChatWindow = (chatWindowProps: ChatWindowProps) => {
         return !isSending && inputValue.trim() !== "";
     }
 
-    const sendQuestion = async () => {
+    const sendQuestion = async (inputValue: string, canUseRAG: number) => {
         if (!inputValue || isSending) {
             return;
         }
@@ -71,14 +72,25 @@ const ChatWindow = (chatWindowProps: ChatWindowProps) => {
         scrollToLatest();
 
         try {
-            const res = await fetchGetAnswer(inputValue, canUseRAG, currentKnowledgeBaseId, currentCid);
-
-            openHistoryConversation(res?.conversationId || currentCid);
-
+            const res = await getChat(
+                {
+                    question: inputValue,
+                    userId: baseState.userId,
+                    conversationId: currentCid,
+                    knowledgeBaseId: currentKnowledgeBaseId,
+                    canUseRAG
+                }, baseState.token);
+            if (res.data) {
+                openHistoryConversation(res.data.conversationId || currentCid);
+            } else {
+                openHistoryConversation(currentCid);
+                message.error(res.msg || "获取答案失败")
+            }
             // 更新消息内容
             getChatInfos();
             scrollToLatest();
         } catch (error) {
+            message.error("获取答案失败")
             console.error("获取答案失败:", error);
             rollbackConversation();
             openHistoryConversation(currentCid);
@@ -96,11 +108,12 @@ const ChatWindow = (chatWindowProps: ChatWindowProps) => {
     }
 
     // 创建消息对象
-    const createMessage = (question: string, content: string, knowledge: string, messageId: number) => ({
+    const createMessage = (question: string, content: string, knowledge: string, messageId: number, favourite: number = 0) => ({
         question,
         content,
         knowledge,
         messageId,
+        favourite
     });
 
     // 更新会话信息
@@ -168,6 +181,69 @@ const ChatWindow = (chatWindowProps: ChatWindowProps) => {
             rect.right <= (window.innerWidth || document.documentElement.clientWidth) // 元素的右边在视口范围内
         return !isInView;
     };
+
+    const clickGiveLike = async (isFavourite: boolean, messageId: number) => {
+        try {
+            const res = await giveLike(baseState.token, messageId, isFavourite ? 1 : 0)
+            if (res.data) {
+                getChatInfos();
+                if (isFavourite) {
+                    message.success("感谢您的评价，我会继续努力");
+                } else {
+                    message.success("感谢您的反馈，我会尽快改进");
+                }
+
+            } else {
+                message.error("评价失败");
+            }
+        } catch (error) {
+            console.error("点赞失败:", error);
+            message.error("点赞失败");
+        }
+
+    }
+
+    const refreshChat = async (message: ConversationInfo) => {
+        console.log(message);
+        await sendQuestion(message.question, message.knowledge ? 1 : 0)
+    }
+
+    const clickFeedback = async (messageId: number) => {
+        bus.emit('openFeedBack', messageId);
+    }
+
+    const renderFavouriteIcons = (favourite: number, messageId: number) => {
+        if (favourite === 1) {
+            return (
+                <>
+                    <div className="utilsIcon">
+                        <img src="src/images/点赞.png" alt="" />
+                    </div>
+                </>
+            )
+        } else if (favourite === -1) {
+            return (
+                <>
+                    <div className="utilsIcon">
+                        <img src="src/images/差评.png" alt="" />
+                    </div>
+                </>
+            )
+        } else {
+            return (
+                <>
+                    <div className="utilsIcon" onClick={() => clickGiveLike(true, messageId)}>
+                        <img src="src/images/无点赞.png" alt="" />
+                    </div>
+                    <div className="utilsIcon" onClick={() => clickGiveLike(false, messageId)}>
+                        <img src="src/images/无差评.png" alt="" />
+                    </div>
+                </>
+            )
+        }
+    }
+
+
 
 
     useEffect(() => {
@@ -238,7 +314,7 @@ const ChatWindow = (chatWindowProps: ChatWindowProps) => {
                                     isLastMessage && item.content === ""
                                         ? <div className="chatLoding"><Spin /></div>
                                         : <div className="chatAnswer">
-                                            <ReactMarkdown>
+                                            <ReactMarkdown className="markdown-body">
                                                 {item.content}
                                             </ReactMarkdown>
                                         </div>
@@ -246,8 +322,24 @@ const ChatWindow = (chatWindowProps: ChatWindowProps) => {
 
                             </div>
                             {
-
-                                item.knowledge
+                                !!item.messageId
+                                && <div className="chatMessageUtilContainer">
+                                    <div className="utilsIcon" onClick={() => clickPaste(item.content)}>
+                                        <img src="src\images\复制.png" alt="复制文本" />
+                                    </div>
+                                    {
+                                        renderFavouriteIcons(item.favourite, item.messageId)
+                                    }
+                                    <div className="utilsIcon" onClick={() => refreshChat(item)}>
+                                        <img src="src\images\刷新.png" alt="刷新" />
+                                    </div>
+                                    <div className="utilsIcon" onClick={() => clickFeedback(item.messageId)} >
+                                        <img src="src\images\意见反馈小.png" alt="反馈" />
+                                    </div>
+                                </div>
+                            }
+                            {
+                                !!item.knowledge
                                 &&
                                 <div className="chatKnowledgeContainer">
                                     <Collapse
@@ -293,7 +385,7 @@ const ChatWindow = (chatWindowProps: ChatWindowProps) => {
                     onChange={handleInputChange} // 监听输入变化
                     onKeyDown={(event) => {
                         if (event.key === "Enter") {
-                            sendQuestion();
+                            sendQuestion(inputValue, canUseRAG);
                         }
                     }}
                 />
@@ -312,7 +404,7 @@ const ChatWindow = (chatWindowProps: ChatWindowProps) => {
                 >
                     <img
                         className="sendButton"
-                        onClick={() => sendQuestion()}
+                        onClick={() => sendQuestion(inputValue, canUseRAG)}
                         src="src\images\send.png"
                     />
                 </div>

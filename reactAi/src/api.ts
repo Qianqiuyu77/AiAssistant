@@ -1,7 +1,9 @@
 import axios from 'axios';
 import { IResponse } from './types/utils';
 import { AddKnowledgeData, AdminKnowledgeBase, ChunksData, EcharsData, UserChatInfos, UserData } from './types/admin';
-import { MessageType } from './types/chat';
+import { ChatAnswer, ChatParams, MessageType } from './types/chat';
+import { Paper } from './types/exam';
+import { FeedbackInfo } from './types/feedback';
 
 const host = 'http://localhost:5000'
 
@@ -34,12 +36,13 @@ export async function register(userName: string, passWord: string) {
     }
 }
 
-export async function getAllChat(userId: number) {
+export async function getAllChat(token: string) {
     try {
         const res = await axios.get(`${host}/getAllChat`, {
-            params: {
-                userId,
-            },
+
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
         });
         return res.data;
     } catch (err) {
@@ -48,17 +51,17 @@ export async function getAllChat(userId: number) {
     }
 }
 
-export async function getChat(question: string, userId: number, conversationId?: number, knowledgeBaseId: number = 0, canUseRAG: number = 0) {
+export async function getChat(chatParams: ChatParams, token: string): Promise<IResponse<ChatAnswer>> {
     try {
-        const res = await axios.post(`${host}/chat`, (
+        const res = await axios.post(`${host}/chat`,
+            chatParams,
             {
-                question,
-                userId,
-                conversationId,
-                canUseRAG,
-                knowledgeBaseId,
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
             }
-        ));
+
+        );
 
         return res.data;
     } catch (err) {
@@ -67,12 +70,12 @@ export async function getChat(question: string, userId: number, conversationId?:
     }
 }
 
-export async function getAllKnowledgeBase(userId: number) {
+export async function getAllKnowledgeBase(token: string) {
     try {
         const res = await axios.get(`${host}/getAllKnowledgeBase`, {
-            params: {
-                userId,
-            },
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
         });
 
         return res.data;
@@ -83,9 +86,12 @@ export async function getAllKnowledgeBase(userId: number) {
 
 }
 
-export async function renameConversation(conversationId: number, conversationName: string) {
+export async function renameConversation(conversationId: number, conversationName: string, token: string) {
     try {
         const res = await axios.get(`${host}/renameConversation`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
             params: {
                 conversationId,
                 conversationName
@@ -101,9 +107,12 @@ export async function renameConversation(conversationId: number, conversationNam
 
 }
 
-export async function deleteConversation(conversationId: number) {
+export async function deleteConversation(conversationId: number, token: string) {
     try {
         const res = await axios.get(`${host}/deleteConversation`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
             params: {
                 conversationId,
             }
@@ -194,6 +203,21 @@ export async function getEcharsData(token: string): Promise<IResponse<EcharsData
     } catch (err) {
         console.log(err);
         throw new Error("Failed to fetch echars data");
+    }
+}
+
+export async function getFeedbackData(token: string): Promise<IResponse<FeedbackInfo[]>> {
+    try {
+        const res = await axios.get(`${host}/admin/getFeedbackData`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        return res.data;
+    } catch (err) {
+        console.log(err);
+        throw new Error("Failed to fetch feedback data");
     }
 }
 
@@ -292,5 +316,76 @@ export async function uploadImage(token: string, formData: FormData): Promise<IR
     } catch (err) {
         console.error(err);
         throw new Error("Failed to uploadImage");
+    }
+}
+
+// 试卷
+export async function getPaper(token: string, conversationId: number, options?: { signal?: AbortSignal }): Promise<IResponse<Paper>> {
+    try {
+        const res = await axios.get(`${host}/getPaper`, {
+            params: { conversationId },
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+            signal: options?.signal, // 传入 AbortSignal
+        });
+        return res.data;
+    } catch (err) {
+        if (axios.isCancel(err)) {
+            throw err;
+        }
+        console.error(err);
+        throw err;
+    }
+}
+
+export async function comitPaper(token: string, conversationId: number, score: number = 0): Promise<IResponse<boolean>> {
+    try {
+        const res = await axios.post(`${host}/comitPaper`, {
+            conversationId,
+            score
+        }, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+        });
+
+        return res.data;
+    } catch (err) {
+        console.error(err);
+        throw new Error("Failed to preview chunks");
+    }
+}
+
+export async function giveLike(token: string, messageId: number, isFavourite: number): Promise<IResponse<boolean>> {
+    try {
+        const res = await axios.get(`${host}/giveLike`, {
+            params: { messageId, isFavourite },
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+        });
+        return res.data;
+    } catch (err) {
+        console.error(err);
+        throw err;
+    }
+
+}
+
+export async function commitFeedback(token: string, feedInfo: FeedbackInfo): Promise<IResponse<boolean>> {
+    try {
+        const res = await axios.post(`${host}/commitFeedback`,
+            feedInfo,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                },
+            }
+        );
+        return res.data;
+    } catch (err) {
+        console.error(err);
+        throw err;
     }
 }

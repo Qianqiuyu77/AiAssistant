@@ -1,12 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
-import { getAllKnowledgeBase, getAllMessages, getEcharsData, getusers } from "../../api";
+import { getAllKnowledgeBase, getAllMessages, getEcharsData, getFeedbackData, getusers } from "../../api";
 import App from "./index";
 import { message } from "antd";
 import { AdminKnowledgeBase, EcharsData, UserData } from "../../types/admin";
 import { useLocation } from "react-router-dom";
 import { MessageType } from "../../types/chat";
 import useBaseStore from "../../../zustand/baseStore";
+import { FeedbackInfo } from "../../types/feedback";
 
 const Admin = () => {
 
@@ -19,7 +20,20 @@ const Admin = () => {
         totalMessageCount: 0,
         messageCount: [],
         avgScore: [],
-        knowledgeBasesData: []
+        knowledgeBasesData: [],
+        totalExamCount: 0,
+        avgExamScore: 0,
+        examCount: [],
+        highestExam: {
+            userId: 0,
+            conversationId: 0,
+            score: 0,
+        },
+        lowestExam: {
+            userId: 0,
+            conversationId: 0,
+            score: 0,
+        }
     });
 
     const baseState = useBaseStore(state => state);
@@ -29,6 +43,8 @@ const Admin = () => {
     const [messageInfos, setMessageInfos] = useState<MessageType[]>([]);
 
     const [knowledgeBases, setKnowledgeBases] = useState<AdminKnowledgeBase[]>([]);
+
+    const [feedBackInfos, setFeedBackInfos] = useState<FeedbackInfo[]>([]);
 
     async function fetchGetEcharsData() {
         try {
@@ -104,7 +120,7 @@ const Admin = () => {
 
     async function fetchGetKnowledgeBases() {
         try {
-            const res = await getAllKnowledgeBase(userId);
+            const res = await getAllKnowledgeBase(token);
             console.log(res);
             if (res.data) {
                 setKnowledgeBases(res.data);
@@ -119,6 +135,30 @@ const Admin = () => {
             console.log(err);
             message.error({
                 content: "获取知识库信息失败，请重试",
+                key: "loading",
+                duration: 2,
+            });
+        }
+    }
+
+    async function fetchGetFeedbacks() {
+        try {
+            const res = await getFeedbackData(token);
+            console.log(res);
+            if (res.data) {
+                setFeedBackInfos(res.data);
+            } else {
+                message.error({
+                    content: res.msg || "获取反馈信息失败，请重试",
+                    key: "loading",
+                    duration: 2,
+                })
+            }
+
+        } catch (err) {
+            console.log(err);
+            message.error({
+                content: "获取反馈信息失败，请重试",
                 key: "loading",
                 duration: 2,
             });
@@ -147,10 +187,12 @@ const Admin = () => {
                 userDatas={userDatas}
                 messageInfos={messageInfos}
                 knowledgeBases={knowledgeBases}
+                feedBackInfos={feedBackInfos}
                 fetchGetUserData={fetchGetUserData}
                 fetchGetEcharsData={fetchGetEcharsData}
                 fetchGetAllMessages={fetchGetAllMessages}
                 fetchGetKnowledgeBases={fetchGetKnowledgeBases}
+                fetchGetFeedbacks={fetchGetFeedbacks}
             />
         </>
     );

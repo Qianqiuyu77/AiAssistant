@@ -1,3 +1,5 @@
+import { message } from "antd";
+
 export function getTokenNumber(text: string): number {
     // 按以下规则匹配：
     const regex = /[a-zA-Z0-9]+|[\u4e00-\u9fa5]|[^\s\w\u4e00-\u9fa5]+/g;
@@ -15,4 +17,16 @@ export function getTokenNumber(text: string): number {
     });
 
     return tokens.length; // 返回 token 数量
+}
+
+export const clickPaste = (text: string) => {
+    navigator.clipboard.writeText(text)
+        .then(() => {
+            message.success("复制成功");
+        })
+        .catch(err => {
+            console.log(err);
+
+            message.error("复制失败");
+        });
 }

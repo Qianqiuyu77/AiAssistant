@@ -3,7 +3,7 @@
     overflow-y: scroll;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: 10rem 25rem 20rem 25rem; /* 4 行 */
+    grid-template-rows: 10rem 25rem 20rem 25rem 10rem 25rem; /* 4 行 */
     gap: 2rem;
   }
   

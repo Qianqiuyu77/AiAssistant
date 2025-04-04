@@ -2,7 +2,10 @@ import { MenuProps } from 'antd/es/menu';
 import './index.scss'
 import { useNavigate } from 'react-router-dom';
 import Dropdown, { DropdownProps } from 'antd/es/dropdown';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import FeedBackBox from '../feedBackBox';
+import ShadowBox from '../shadowBox';
+import { bus } from '../../bus';
 
 interface HeaderProps {
     userName: string;
@@ -10,6 +13,10 @@ interface HeaderProps {
 const Header = (props: HeaderProps) => {
     const { userName = '' } = props;
     const navigate = useNavigate();
+
+    const [feedBackOpen, setFeedBackOpen] = useState(false);
+    const messageIdRef = useRef<number>(0);
+
 
     const items: MenuProps["items"] = [
         {
@@ -39,6 +46,22 @@ const Header = (props: HeaderProps) => {
         }
     };
 
+    const openFeedBack = () => {
+        setFeedBackOpen(true);
+    }
+
+    useEffect(() => {
+        bus.on('openFeedBack', (messageId: number) => {
+            console.log(messageId);
+
+            messageIdRef.current = messageId;
+            openFeedBack()
+        })
+        return () => {
+            bus.off('openFeedBack')
+        }
+    }, [])
+
     return (
         <>
             <div className="topBar">
@@ -52,7 +75,7 @@ const Header = (props: HeaderProps) => {
                     </div>
                 </div>
                 <div className="functionalBar" >
-                    <div className="feedBack">
+                    <div className="feedBack" onClick={openFeedBack}>
                         <img src="src/images/意见反馈.png" alt="" />
                         意见反馈
                     </div>
@@ -79,6 +102,16 @@ const Header = (props: HeaderProps) => {
                     </Dropdown>
                 </div>
             </div>
+            {
+                feedBackOpen &&
+                <ShadowBox>
+                    <FeedBackBox
+                        closeFeedBack={() => setFeedBackOpen(false)}
+                        messageId={messageIdRef.current}
+                    />
+                </ShadowBox>
+
+            }
         </>
 
     )

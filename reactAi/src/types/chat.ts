@@ -11,6 +11,7 @@ export interface ConversationInfo {
     knowledge: string
     messageId: number
     question: string
+    favourite: number
 }
 
 export interface ChatAnswer {
@@ -43,4 +44,12 @@ export interface MessageType extends ConversationInfo {
     userId: number
     conversationId: number
     knowledgeId: number
+}
+
+export interface ChatParams {
+    question: string
+    userId: number
+    conversationId?: number
+    knowledgeBaseId: number
+    canUseRAG: number
 }

@@ -2,6 +2,7 @@ import {
     AppstoreOutlined,
     // ContainerOutlined,
     DesktopOutlined,
+    FormOutlined,
     MailOutlined,
     MenuFoldOutlined,
     MenuUnfoldOutlined,
@@ -40,7 +41,7 @@ const Sider = (props: SiderProps) => {
             ]
         },
         // { key: AdminSiderKeys.LOG_MANAGEMENT, icon: <ContainerOutlined />, label: '日志管理' },
-        // { key: AdminSiderKeys.FEEDBACK_INFORMATION, icon: <AppstoreOutlined />, label: '反馈信息', },
+        { key: AdminSiderKeys.FEEDBACK_INFORMATION, icon: <FormOutlined />, label: '反馈信息', },
     ];
 
     return (
