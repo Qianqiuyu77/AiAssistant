@@ -45,3 +45,11 @@ export interface MessageType extends ConversationInfo {
     conversationId: number
     knowledgeId: number
 }
+
+export interface ChatParams {
+    question: string
+    userId: number
+    conversationId?: number
+    knowledgeBaseId: number
+    canUseRAG: number
+}

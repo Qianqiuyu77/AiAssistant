@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
-import { ChatAnswer, ChatInfo, defaultChatInfo, KnowledgeBase } from "../../types/chat";
+import { ChatInfo, defaultChatInfo, KnowledgeBase } from "../../types/chat";
 import "./index.scss"
 import ConversationList from "./compents/conversationList/index";
 import ChatWindow from "./compents/chatWindow";
-import useBaseStore from "../../../zustand/baseStore";
-import { deleteConversation, getChat, renameConversation } from "../../api";
+import { deleteConversation, renameConversation } from "../../api";
 import { bus } from "../../bus";
 import SiderBar from "./compents/siderBar";
 import Header from "../../component/header";
 import Exam from "./compents/exam";
 import ShadowBox from "../../component/shadowBox";
+import useBaseStore from "../../../zustand/baseStore";
 
 interface HomeProps {
     chatInfos: ChatInfo[];
@@ -24,7 +24,7 @@ const App = (homeProps: HomeProps) => {
 
     const { chatInfos = [], knowledgeBases = [], userName = '', showNotification, getChatInfos } = homeProps;
 
-    const baseState = useBaseStore();
+    const baseState = useBaseStore()
 
     const [currentCid, setCurrentCid] = useState<number>(-1);
 
@@ -67,22 +67,10 @@ const App = (homeProps: HomeProps) => {
         showNotification('已成功切换至' + knowledgeBases.find((kb) => kb.knowledgebaseId === knowledgeBaseId)?.knowledgebaseName + "知识库", true);
     }
 
-    const fetchGetAnswer = async (question: string, canUseRAG: number = 0, currentKnowledgeBaseId = 0, conversationId?: number): Promise<ChatAnswer> => {
-        try {
-            const res = await getChat(question, baseState.userId, conversationId, currentKnowledgeBaseId, canUseRAG);
-            return res.data
-
-        } catch (err) {
-            showNotification("获取回答失败", false)
-            throw err
-        }
-
-    }
-
 
     const fetchRenameConversation = async (conversationId: number, conversationName: string) => {
         try {
-            const res = await renameConversation(conversationId, conversationName);
+            const res = await renameConversation(conversationId, conversationName, baseState.token);
             showNotification("重命名对话成功", true)
             return res
 
@@ -94,7 +82,7 @@ const App = (homeProps: HomeProps) => {
 
     const fetchDeleteConversation = async (conversationId: number) => {
         try {
-            const res = await deleteConversation(conversationId);
+            const res = await deleteConversation(conversationId, baseState.token);
             showNotification("删除对话成功", true)
             return res
 
@@ -165,7 +153,6 @@ const App = (homeProps: HomeProps) => {
                         <div className="chatWindow">
                             <ChatWindow
                                 chatInfo={getChatInfoByCid()}
-                                fetchGetAnswer={fetchGetAnswer}
                                 currentCid={currentCid}
                                 getChatInfos={getChatInfos}
                                 openHistoryConversation={openHistoryConversation}

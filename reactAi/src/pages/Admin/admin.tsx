@@ -107,7 +107,7 @@ const Admin = () => {
 
     async function fetchGetKnowledgeBases() {
         try {
-            const res = await getAllKnowledgeBase(userId);
+            const res = await getAllKnowledgeBase(token);
             console.log(res);
             if (res.data) {
                 setKnowledgeBases(res.data);

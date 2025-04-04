@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { IResponse } from './types/utils';
 import { AddKnowledgeData, AdminKnowledgeBase, ChunksData, EcharsData, UserChatInfos, UserData } from './types/admin';
-import { MessageType } from './types/chat';
+import { ChatAnswer, ChatParams, MessageType } from './types/chat';
 import { Paper } from './types/exam';
 import { FeedbackInfo } from './types/feedback';
 
@@ -36,12 +36,13 @@ export async function register(userName: string, passWord: string) {
     }
 }
 
-export async function getAllChat(userId: number) {
+export async function getAllChat(token: string) {
     try {
         const res = await axios.get(`${host}/getAllChat`, {
-            params: {
-                userId,
-            },
+
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
         });
         return res.data;
     } catch (err) {
@@ -50,17 +51,17 @@ export async function getAllChat(userId: number) {
     }
 }
 
-export async function getChat(question: string, userId: number, conversationId?: number, knowledgeBaseId: number = 0, canUseRAG: number = 0) {
+export async function getChat(chatParams: ChatParams, token: string): Promise<IResponse<ChatAnswer>> {
     try {
-        const res = await axios.post(`${host}/chat`, (
+        const res = await axios.post(`${host}/chat`,
+            chatParams,
             {
-                question,
-                userId,
-                conversationId,
-                canUseRAG,
-                knowledgeBaseId,
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
             }
-        ));
+
+        );
 
         return res.data;
     } catch (err) {
@@ -69,12 +70,12 @@ export async function getChat(question: string, userId: number, conversationId?:
     }
 }
 
-export async function getAllKnowledgeBase(userId: number) {
+export async function getAllKnowledgeBase(token: string) {
     try {
         const res = await axios.get(`${host}/getAllKnowledgeBase`, {
-            params: {
-                userId,
-            },
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
         });
 
         return res.data;
@@ -85,9 +86,12 @@ export async function getAllKnowledgeBase(userId: number) {
 
 }
 
-export async function renameConversation(conversationId: number, conversationName: string) {
+export async function renameConversation(conversationId: number, conversationName: string, token: string) {
     try {
         const res = await axios.get(`${host}/renameConversation`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
             params: {
                 conversationId,
                 conversationName
@@ -103,9 +107,12 @@ export async function renameConversation(conversationId: number, conversationNam
 
 }
 
-export async function deleteConversation(conversationId: number) {
+export async function deleteConversation(conversationId: number, token: string) {
     try {
         const res = await axios.get(`${host}/deleteConversation`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
             params: {
                 conversationId,
             }
@@ -313,10 +320,13 @@ export async function uploadImage(token: string, formData: FormData): Promise<IR
 }
 
 // 试卷
-export async function getPaper(conversationId: number, options?: { signal?: AbortSignal }): Promise<IResponse<Paper>> {
+export async function getPaper(token: string, conversationId: number, options?: { signal?: AbortSignal }): Promise<IResponse<Paper>> {
     try {
         const res = await axios.get(`${host}/getPaper`, {
             params: { conversationId },
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
             signal: options?.signal, // 传入 AbortSignal
         });
         return res.data;
@@ -329,12 +339,15 @@ export async function getPaper(conversationId: number, options?: { signal?: Abor
     }
 }
 
-export async function comitPaper(userId: number, conversationId: number, score: number = 0): Promise<IResponse<boolean>> {
+export async function comitPaper(token: string, conversationId: number, score: number = 0): Promise<IResponse<boolean>> {
     try {
         const res = await axios.post(`${host}/comitPaper`, {
-            userId,
             conversationId,
             score
+        }, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
         });
 
         return res.data;
@@ -344,10 +357,13 @@ export async function comitPaper(userId: number, conversationId: number, score: 
     }
 }
 
-export async function giveLike(userId: number, messageId: number, isFavourite: number): Promise<IResponse<boolean>> {
+export async function giveLike(token: string, messageId: number, isFavourite: number): Promise<IResponse<boolean>> {
     try {
         const res = await axios.get(`${host}/giveLike`, {
-            params: { userId, messageId, isFavourite }
+            params: { messageId, isFavourite },
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
         });
         return res.data;
     } catch (err) {
@@ -357,9 +373,16 @@ export async function giveLike(userId: number, messageId: number, isFavourite: n
 
 }
 
-export async function commitFeedback(feedInfo: FeedbackInfo): Promise<IResponse<boolean>> {
+export async function commitFeedback(token: string, feedInfo: FeedbackInfo): Promise<IResponse<boolean>> {
     try {
-        const res = await axios.post(`${host}/commitFeedback`, feedInfo);
+        const res = await axios.post(`${host}/commitFeedback`,
+            feedInfo,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                },
+            }
+        );
         return res.data;
     } catch (err) {
         console.error(err);

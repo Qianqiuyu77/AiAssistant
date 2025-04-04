@@ -24,7 +24,7 @@ const FeedBackBox = ({ closeFeedBack, messageId }: FeedBackBoxProps) => {
                 values.messageId = messageId;
             }
 
-            await commitFeedback(values);
+            await commitFeedback(baseState.token, values);
             message.success('反馈已提交，感谢您的意见！');
             closeFeedBack();
         } catch (error) {

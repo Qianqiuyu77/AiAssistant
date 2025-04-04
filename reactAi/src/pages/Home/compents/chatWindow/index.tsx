@@ -1,5 +1,5 @@
 import { OpenAIOutlined, PaperClipOutlined } from "@ant-design/icons";
-import { ChatAnswer, ChatInfo, ChatState, ConversationInfo } from "../../../../types/chat";
+import { ChatInfo, ChatState, ConversationInfo } from "../../../../types/chat";
 import "./index.scss";
 import { SetStateAction, useEffect, useRef, useState } from "react";
 import useBaseStore from "../../../../../zustand/baseStore";
@@ -11,14 +11,13 @@ import type { CollapseProps } from 'antd';
 import { Collapse, theme } from 'antd';
 import { bus } from "../../../../bus";
 import ReactMarkdown from "react-markdown";
-import { giveLike } from "../../../../api";
+import { getChat, giveLike } from "../../../../api";
 import { clickPaste } from "../../../../utils";
 
 interface ChatWindowProps {
     chatInfo: ChatInfo;
     currentCid: number;
     currentKnowledgeBaseId: number;
-    fetchGetAnswer: (question: string, canUseRAG: number, currentKnowledgeBaseId: number, conversationId?: number) => Promise<ChatAnswer>;
     getChatInfos: () => void;
     openHistoryConversation: (conversationId: number) => void;
 }
@@ -28,7 +27,7 @@ const LIMIT_INPUT = 300;
 const ChatWindow = (chatWindowProps: ChatWindowProps) => {
     const baseState = useBaseStore();
 
-    const { chatInfo, fetchGetAnswer, currentCid, currentKnowledgeBaseId, getChatInfos, openHistoryConversation } = chatWindowProps;
+    const { chatInfo, currentCid, currentKnowledgeBaseId, getChatInfos, openHistoryConversation } = chatWindowProps;
 
     const [inputValue, setInputValue] = useState<string>("");
 
@@ -73,14 +72,25 @@ const ChatWindow = (chatWindowProps: ChatWindowProps) => {
         scrollToLatest();
 
         try {
-            const res = await fetchGetAnswer(inputValue, canUseRAG, currentKnowledgeBaseId, currentCid);
-
-            openHistoryConversation(res?.conversationId || currentCid);
-
+            const res = await getChat(
+                {
+                    question: inputValue,
+                    userId: baseState.userId,
+                    conversationId: currentCid,
+                    knowledgeBaseId: currentKnowledgeBaseId,
+                    canUseRAG
+                }, baseState.token);
+            if (res.data) {
+                openHistoryConversation(res.data.conversationId || currentCid);
+            } else {
+                openHistoryConversation(currentCid);
+                message.error(res.msg || "获取答案失败")
+            }
             // 更新消息内容
             getChatInfos();
             scrollToLatest();
         } catch (error) {
+            message.error("获取答案失败")
             console.error("获取答案失败:", error);
             rollbackConversation();
             openHistoryConversation(currentCid);
@@ -174,7 +184,7 @@ const ChatWindow = (chatWindowProps: ChatWindowProps) => {
 
     const clickGiveLike = async (isFavourite: boolean, messageId: number) => {
         try {
-            const res = await giveLike(baseState.userId, messageId, isFavourite ? 1 : 0)
+            const res = await giveLike(baseState.token, messageId, isFavourite ? 1 : 0)
             if (res.data) {
                 getChatInfos();
                 if (isFavourite) {

@@ -16,7 +16,7 @@ interface ExamProps {
 
 const Exam = (props: ExamProps) => {
 
-    const userId = useBaseStore().userId;
+    const { token } = useBaseStore();
     const { conversationId, setExamclose } = props;
     const [questionList, setQuestionList] = useState<Question[]>([]);
     // 组件状态
@@ -53,7 +53,7 @@ const Exam = (props: ExamProps) => {
     const onSubmit = () => {
         score.current = calculateScore()
         setStep(ExamStep.resultStep);
-        comitPaper(userId, conversationId, score.current);
+        comitPaper(token, conversationId, score.current);
     }
 
     const onSuccessRetry = () => {
@@ -75,7 +75,7 @@ const Exam = (props: ExamProps) => {
     const fetchGetPaper = async (conversationId: number, controller: AbortController) => {
         try {
 
-            const res = await getPaper(conversationId, { signal: controller.signal });
+            const res = await getPaper(token, conversationId, { signal: controller.signal });
             if (res.data) {
                 setQuestionList(res.data?.questions || [])
             } else {
