@@ -28,7 +28,8 @@ const Dashboard = (props: DashBoardProps) => {
         chatNumberConfig,
         knowledgeCountConfig,
         sortedData,
-        columns
+        columns,
+        examNumberConfig,
     } = useMakeEcharsData({ echarsData });
 
     useEffect(() => {
@@ -41,7 +42,7 @@ const Dashboard = (props: DashBoardProps) => {
 
     return (
         <div className="container">
-            <div className="item item1 personNumber">
+            <div className="item item1">
                 <Card
                     loading={loading}
                     title="活跃用户数量"
@@ -178,7 +179,82 @@ const Dashboard = (props: DashBoardProps) => {
 
             </div>
 
+            <div className='item item1'>
+                <Card
+                    loading={loading}
+                    title="总考试次数"
+                    style={{ height: '100%' }}
+                    extra={
+                        <Tooltip title="总考试次数">
+                            <InfoCircleOutlined />
+                        </Tooltip>
+                    }>
+                    <span className='dataNumber'>{echarsData.totalExamCount}</span>次
+                </Card>
+            </div>
+            <div className='item item1'>
+                <Card
+                    loading={loading}
+                    title="考试平均分"
+                    style={{ height: '100%' }}
+                    extra={
+                        <Tooltip title="考试平均分">
+                            <InfoCircleOutlined />
+                        </Tooltip>
+                    }>
+                    <span className='dataNumber'>{echarsData.avgExamScore}</span>分
+                </Card>
+            </div>
+            <div className='item item1'>
+                <Card
+                    loading={loading}
+                    title="最高分"
+                    style={{ height: '100%' }}
+                    extra={
+                        <Tooltip title="考试最高分">
+                            <InfoCircleOutlined />
+                        </Tooltip>
+                    }>
+                    <span className='dataNumber'>{echarsData?.highestExam?.score || 0}</span>分
+                    <div className='scoreInfo'>
+                        <div>用户ID:{echarsData?.highestExam?.userId}</div>
+                        <div>对话ID:{echarsData?.highestExam?.conversationId}</div>
+                    </div>
+                </Card>
+            </div>
+            <div className='item item1'>
+                <Card
+                    loading={loading}
+                    title="最低分"
+                    style={{ height: '100%' }}
+                    extra={
+                        <Tooltip title="考试最低分">
+                            <InfoCircleOutlined />
+                        </Tooltip>
+                    }>
+                    <span className='dataNumber'>{echarsData?.lowestExam?.score || 0}</span>分
+                    <div className='scoreInfo'>
+                        <div>用户ID:{echarsData?.lowestExam?.userId}</div>
+                        <div>对话ID:{echarsData?.lowestExam?.conversationId}</div>
+                    </div>
+                </Card>
+            </div>
 
+            <div className="item item4">
+                <Card
+                    loading={loading}
+                    title="三十天考试次数"
+                    style={{ height: '100%' }}
+                    extra={
+                        <Tooltip title="三十天内每天考试次数">
+                            <InfoCircleOutlined />
+                        </Tooltip>
+                    }
+                >
+                    <Column {...examNumberConfig} />
+                </Card>
+
+            </div>
 
         </div>
     );

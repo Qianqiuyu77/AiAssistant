@@ -20,7 +20,20 @@ const Admin = () => {
         totalMessageCount: 0,
         messageCount: [],
         avgScore: [],
-        knowledgeBasesData: []
+        knowledgeBasesData: [],
+        totalExamCount: 0,
+        avgExamScore: 0,
+        examCount: [],
+        highestExam: {
+            userId: 0,
+            conversationId: 0,
+            score: 0,
+        },
+        lowestExam: {
+            userId: 0,
+            conversationId: 0,
+            score: 0,
+        }
     });
 
     const baseState = useBaseStore(state => state);
