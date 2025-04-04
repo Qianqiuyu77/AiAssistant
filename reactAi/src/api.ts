@@ -3,6 +3,7 @@ import { IResponse } from './types/utils';
 import { AddKnowledgeData, AdminKnowledgeBase, ChunksData, EcharsData, UserChatInfos, UserData } from './types/admin';
 import { MessageType } from './types/chat';
 import { Paper } from './types/exam';
+import { FeedbackInfo } from './types/feedback';
 
 const host = 'http://localhost:5000'
 
@@ -198,6 +199,21 @@ export async function getEcharsData(token: string): Promise<IResponse<EcharsData
     }
 }
 
+export async function getFeedbackData(token: string): Promise<IResponse<FeedbackInfo[]>> {
+    try {
+        const res = await axios.get(`${host}/admin/getFeedbackData`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        return res.data;
+    } catch (err) {
+        console.log(err);
+        throw new Error("Failed to fetch feedback data");
+    }
+}
+
 
 // 1. 删除知识库
 export async function deleteKnowledgeBase(token: string, knowledgeBaseId: number): Promise<IResponse<null>> {
@@ -339,4 +355,14 @@ export async function giveLike(userId: number, messageId: number, isFavourite: n
         throw err;
     }
 
+}
+
+export async function commitFeedback(feedInfo: FeedbackInfo): Promise<IResponse<boolean>> {
+    try {
+        const res = await axios.post(`${host}/commitFeedback`, feedInfo);
+        return res.data;
+    } catch (err) {
+        console.error(err);
+        throw err;
+    }
 }

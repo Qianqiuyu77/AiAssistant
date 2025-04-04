@@ -42,14 +42,12 @@ const App = (homeProps: HomeProps) => {
     }
 
     const openNewConversation = () => {
-        console.log('创建新对话');
         bus.emit('resetInput');
         defaultChatInfo.conversationInfo = []
         setCurrentCid(-1);
     }
 
     const openHistoryConversation = (conversationId: number) => {
-        console.log('打开历史对话', conversationId);
         bus.emit('resetInput');
         defaultChatInfo.conversationInfo = []
         setCurrentCid(conversationId);
@@ -60,7 +58,6 @@ const App = (homeProps: HomeProps) => {
             showNotification('请先创建对话或者打开历史对话', false);
             return;
         }
-        console.log('创建新试卷')
         setIsExamOpen(true);
     }
 
@@ -113,7 +110,6 @@ const App = (homeProps: HomeProps) => {
         fetchRenameConversation(conversationId, conversationName).then(() => {
             getChatInfos();
         })
-        console.log('重命名对话', conversationId, conversationName);
     }
 
     const clickDeleteConversation = (conversationId: number) => {
@@ -121,16 +117,7 @@ const App = (homeProps: HomeProps) => {
             getChatInfos();
             setCurrentCid(-1);
         })
-        console.log('删除对话', conversationId);
     }
-
-
-
-    useEffect(() => {
-        if (chatInfos && chatInfos.length > 0) {
-            console.log(chatInfos)
-        }
-    }, [chatInfos])
 
     useEffect(() => {
         if (knowledgeBases && knowledgeBases.length > 0) {

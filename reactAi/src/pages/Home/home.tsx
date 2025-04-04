@@ -46,7 +46,6 @@ const Home = () => {
     const getKnowledgeBases = async () => {
         try {
             const res = await getAllKnowledgeBase(baseState.userId);
-            console.log(res);
             if (res.data) {
                 setKnowledgeBases(res.data);
             } else {
@@ -63,7 +62,6 @@ const Home = () => {
     const getChatInfos = async () => {
         try {
             const res = await getAllChat(baseState.userId);
-            console.log(res);
             if (res.data) {
                 setChatInfos(res.data)
             } else {

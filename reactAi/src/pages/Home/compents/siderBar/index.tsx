@@ -17,8 +17,6 @@ const SiderBar = (siderBarProps: SiderBarProps) => {
         clickKnowledgeBase
     } = siderBarProps
 
-    console.log(knowledgeBaseList);
-
     return (
         <div className='siderBarList'>
             {

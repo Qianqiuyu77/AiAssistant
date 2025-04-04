@@ -1,28 +1,30 @@
 import { useState } from 'react';
 import { CloseCircleOutlined } from "@ant-design/icons";
 import { Card, Button, Form, Input, Rate, Select, message } from "antd";
+import { commitFeedback } from '../../api';
+import { FeedbackInfo } from '../../types/feedback';
+import useBaseStore from '../../../zustand/baseStore';
 
 interface FeedBackBoxProps {
     closeFeedBack: () => void;
+    messageId: number;
 }
 
-interface FeedbackValues {
-    content: string;
-    rating: number;
-    type: 'suggestion' | 'bug' | 'other';
-    contact?: string;
-}
 
-const FeedBackBox = ({ closeFeedBack }: FeedBackBoxProps) => {
+const FeedBackBox = ({ closeFeedBack, messageId }: FeedBackBoxProps) => {
     const [form] = Form.useForm();
     const [submitting, setSubmitting] = useState(false);
+    const baseState = useBaseStore();
 
-    const handleSubmit = async (values: FeedbackValues) => {
+    const handleSubmit = async (values: FeedbackInfo) => {
         try {
             setSubmitting(true);
-            console.log(values);
+            values.userId = baseState.userId;
+            if (messageId) {
+                values.messageId = messageId;
+            }
 
-            // await onSubmit?.(values);
+            await commitFeedback(values);
             message.success('反馈已提交，感谢您的意见！');
             closeFeedBack();
         } catch (error) {
@@ -47,19 +49,20 @@ const FeedBackBox = ({ closeFeedBack }: FeedBackBoxProps) => {
             >
                 <Form.Item
                     label="反馈类型"
-                    name="type"
+                    name="feedType"
                     rules={[{ required: true }]}
                 >
                     <Select>
                         <Select.Option value="suggestion">功能建议</Select.Option>
                         <Select.Option value="bug">错误报告</Select.Option>
+                        <Select.Option value="praise">夸奖一下</Select.Option>
                         <Select.Option value="other">其他</Select.Option>
                     </Select>
                 </Form.Item>
 
                 <Form.Item
                     label="满意度评分"
-                    name="rating"
+                    name="score"
                     rules={[{ required: true }]}
                 >
                     <Rate />
@@ -67,7 +70,7 @@ const FeedBackBox = ({ closeFeedBack }: FeedBackBoxProps) => {
 
                 <Form.Item
                     label="反馈内容"
-                    name="content"
+                    name="feedInfo"
                     rules={[{ required: true, message: '请输入反馈内容' }]}
                 >
                     <Input.TextArea
@@ -80,7 +83,7 @@ const FeedBackBox = ({ closeFeedBack }: FeedBackBoxProps) => {
 
                 <Form.Item
                     label="联系方式（可选）"
-                    name="contact"
+                    name="userInfo"
                     help="便于我们回复您的反馈"
                 >
                     <Input placeholder="邮箱/手机号/微信" />

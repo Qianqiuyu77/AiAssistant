@@ -3,7 +3,7 @@ import { ChatAnswer, ChatInfo, ChatState, ConversationInfo } from "../../../../t
 import "./index.scss";
 import { SetStateAction, useEffect, useRef, useState } from "react";
 import useBaseStore from "../../../../../zustand/baseStore";
-import { Spin, Switch } from "antd";
+import { message, Spin, Switch } from "antd";
 import type { CSSProperties } from 'react';
 import React from 'react';
 import { CaretRightOutlined } from '@ant-design/icons';
@@ -50,7 +50,7 @@ const ChatWindow = (chatWindowProps: ChatWindowProps) => {
         return !isSending && inputValue.trim() !== "";
     }
 
-    const sendQuestion = async () => {
+    const sendQuestion = async (inputValue: string, canUseRAG: number) => {
         if (!inputValue || isSending) {
             return;
         }
@@ -173,10 +173,33 @@ const ChatWindow = (chatWindowProps: ChatWindowProps) => {
     };
 
     const clickGiveLike = async (isFavourite: boolean, messageId: number) => {
-        const res = await giveLike(baseState.userId, messageId, isFavourite ? 1 : 0)
-        if (res.data) {
-            getChatInfos();
+        try {
+            const res = await giveLike(baseState.userId, messageId, isFavourite ? 1 : 0)
+            if (res.data) {
+                getChatInfos();
+                if (isFavourite) {
+                    message.success("感谢您的评价，我会继续努力");
+                } else {
+                    message.success("感谢您的反馈，我会尽快改进");
+                }
+
+            } else {
+                message.error("评价失败");
+            }
+        } catch (error) {
+            console.error("点赞失败:", error);
+            message.error("点赞失败");
         }
+
+    }
+
+    const refreshChat = async (message: ConversationInfo) => {
+        console.log(message);
+        await sendQuestion(message.question, message.knowledge ? 1 : 0)
+    }
+
+    const clickFeedback = async (messageId: number) => {
+        bus.emit('openFeedBack', messageId);
     }
 
     const renderFavouriteIcons = (favourite: number, messageId: number) => {
@@ -297,6 +320,12 @@ const ChatWindow = (chatWindowProps: ChatWindowProps) => {
                                     {
                                         renderFavouriteIcons(item.favourite, item.messageId)
                                     }
+                                    <div className="utilsIcon" onClick={() => refreshChat(item)}>
+                                        <img src="src\images\刷新.png" alt="刷新" />
+                                    </div>
+                                    <div className="utilsIcon" onClick={() => clickFeedback(item.messageId)} >
+                                        <img src="src\images\意见反馈小.png" alt="反馈" />
+                                    </div>
                                 </div>
                             }
                             {
@@ -346,7 +375,7 @@ const ChatWindow = (chatWindowProps: ChatWindowProps) => {
                     onChange={handleInputChange} // 监听输入变化
                     onKeyDown={(event) => {
                         if (event.key === "Enter") {
-                            sendQuestion();
+                            sendQuestion(inputValue, canUseRAG);
                         }
                     }}
                 />
@@ -365,7 +394,7 @@ const ChatWindow = (chatWindowProps: ChatWindowProps) => {
                 >
                     <img
                         className="sendButton"
-                        onClick={() => sendQuestion()}
+                        onClick={() => sendQuestion(inputValue, canUseRAG)}
                         src="src\images\send.png"
                     />
                 </div>

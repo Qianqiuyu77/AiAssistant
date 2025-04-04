@@ -2,9 +2,10 @@ import { MenuProps } from 'antd/es/menu';
 import './index.scss'
 import { useNavigate } from 'react-router-dom';
 import Dropdown, { DropdownProps } from 'antd/es/dropdown';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import FeedBackBox from '../feedBackBox';
 import ShadowBox from '../shadowBox';
+import { bus } from '../../bus';
 
 interface HeaderProps {
     userName: string;
@@ -13,7 +14,8 @@ const Header = (props: HeaderProps) => {
     const { userName = '' } = props;
     const navigate = useNavigate();
 
-    const [feedBackOpen, setFeedBackOpen] = useState(true);
+    const [feedBackOpen, setFeedBackOpen] = useState(false);
+    const messageIdRef = useRef<number>(0);
 
 
     const items: MenuProps["items"] = [
@@ -47,6 +49,18 @@ const Header = (props: HeaderProps) => {
     const openFeedBack = () => {
         setFeedBackOpen(true);
     }
+
+    useEffect(() => {
+        bus.on('openFeedBack', (messageId: number) => {
+            console.log(messageId);
+
+            messageIdRef.current = messageId;
+            openFeedBack()
+        })
+        return () => {
+            bus.off('openFeedBack')
+        }
+    }, [])
 
     return (
         <>
@@ -93,6 +107,7 @@ const Header = (props: HeaderProps) => {
                 <ShadowBox>
                     <FeedBackBox
                         closeFeedBack={() => setFeedBackOpen(false)}
+                        messageId={messageIdRef.current}
                     />
                 </ShadowBox>
 
