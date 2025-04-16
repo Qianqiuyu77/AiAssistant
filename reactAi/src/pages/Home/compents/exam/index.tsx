@@ -40,10 +40,13 @@ const Exam = (props: ExamProps) => {
     const calculateScore = () => {
         if (questionList.length === 0) return 0;
         let score = 0;
+
         questionList.forEach((item, index) => {
             if (item.answer === userAnswers[index]) {
                 score++;
             }
+            console.log(item.answer);
+
         });
         console.log(Math.round((score / questionList.length) * 100));
 
@@ -231,9 +234,9 @@ const Exam = (props: ExamProps) => {
                             title="很棒! 你已经掌握了这些知识点"
                             subTitle={
                                 <div >
-                                    "你的得分是"
+                                    你的得分是
                                     <span className='score'> {score.current} </span>
-                                    "分"
+                                    分
                                 </div>
 
                             }

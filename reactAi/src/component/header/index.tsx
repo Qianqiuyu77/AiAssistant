@@ -25,6 +25,7 @@ const Header = (props: HeaderProps) => {
                     className="menuItem"
                     onClick={
                         () => {
+                            sessionStorage.removeItem("token");
                             navigate('/login')
                         }
                     }

@@ -79,7 +79,6 @@ const Home = () => {
         if (userId && token) {
             baseState.setToken(token);
             baseState.setUserId(userId);
-
         }
     }, [userId, token])
 

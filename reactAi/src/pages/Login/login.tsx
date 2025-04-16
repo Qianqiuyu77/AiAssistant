@@ -36,6 +36,7 @@ const Login = () => {
                     setIsRegister(false); // 注册成功后重置为登录状态
                     navigate("/login");
                 } else {
+                    sessionStorage.setItem("token", response.data.token);
                     if (response.data.adminId) {
                         navigate("/admin", { state: { userName: response.data.userName, userId: response.data.adminId, token: response.data.token } });// 登录成功后跳转到管理员页面
                     } else {
