@@ -1,0 +1,58 @@
+"filename", "language", "TypeScript", "TypeScript JSX", "SCSS", "JavaScript", "comment", "blank", "total"
+"d:\university\毕业设计\reactAi\reactAi\src\App.scss", "SCSS", 0, 0, 7, 0, 0, 0, 7
+"d:\university\毕业设计\reactAi\reactAi\src\App.tsx", "TypeScript JSX", 0, 36, 0, 0, 1, 6, 43
+"d:\university\毕业设计\reactAi\reactAi\src\api.ts", "TypeScript", 339, 0, 0, 0, 6, 46, 391
+"d:\university\毕业设计\reactAi\reactAi\src\bus.ts", "TypeScript", 2, 0, 0, 0, 1, 1, 4
+"d:\university\毕业设计\reactAi\reactAi\src\component\feedBackBox\index.scss", "SCSS", 0, 0, 0, 0, 0, 1, 1
+"d:\university\毕业设计\reactAi\reactAi\src\component\feedBackBox\index.tsx", "TypeScript JSX", 0, 96, 0, 0, 0, 11, 107
+"d:\university\毕业设计\reactAi\reactAi\src\component\header\index.scss", "SCSS", 0, 0, 70, 0, 0, 2, 72
+"d:\university\毕业设计\reactAi\reactAi\src\component\header\index.tsx", "TypeScript JSX", 0, 107, 0, 0, 0, 14, 121
+"d:\university\毕业设计\reactAi\reactAi\src\component\requireAuth\index.tsx", "TypeScript JSX", 0, 9, 0, 0, 0, 5, 14
+"d:\university\毕业设计\reactAi\reactAi\src\component\shadowBox\index.scss", "SCSS", 0, 0, 12, 0, 0, 1, 13
+"d:\university\毕业设计\reactAi\reactAi\src\component\shadowBox\index.tsx", "TypeScript JSX", 0, 9, 0, 0, 0, 2, 11
+"d:\university\毕业设计\reactAi\reactAi\src\main.tsx", "TypeScript JSX", 0, 5, 0, 0, 0, 2, 7
+"d:\university\毕业设计\reactAi\reactAi\src\pages\Admin\admin.tsx", "TypeScript JSX", 0, 175, 0, 0, 2, 24, 201
+"d:\university\毕业设计\reactAi\reactAi\src\pages\Admin\components\addKnowLedgeBases\hooks.tsx", "TypeScript JSX", 0, 135, 0, 0, 3, 22, 160
+"d:\university\毕业设计\reactAi\reactAi\src\pages\Admin\components\addKnowLedgeBases\index.scss", "SCSS", 0, 0, 124, 0, 6, 23, 153
+"d:\university\毕业设计\reactAi\reactAi\src\pages\Admin\components\addKnowLedgeBases\index.tsx", "TypeScript JSX", 0, 264, 0, 0, 4, 26, 294
+"d:\university\毕业设计\reactAi\reactAi\src\pages\Admin\components\chatInfos\index.scss", "SCSS", 0, 0, 0, 0, 0, 1, 1
+"d:\university\毕业设计\reactAi\reactAi\src\pages\Admin\components\chatInfos\index.tsx", "TypeScript JSX", 0, 243, 0, 0, 9, 16, 268
+"d:\university\毕业设计\reactAi\reactAi\src\pages\Admin\components\dashBoard\hooks.tsx", "TypeScript JSX", 0, 127, 0, 0, 4, 23, 154
+"d:\university\毕业设计\reactAi\reactAi\src\pages\Admin\components\dashBoard\index.scss", "SCSS", 0, 0, 56, 0, 9, 9, 74
+"d:\university\毕业设计\reactAi\reactAi\src\pages\Admin\components\dashBoard\index.tsx", "TypeScript JSX", 0, 240, 0, 0, 0, 23, 263
+"d:\university\毕业设计\reactAi\reactAi\src\pages\Admin\components\dashBoard\mock.js", "JavaScript", 0, 0, 0, 162, 0, 1, 163
+"d:\university\毕业设计\reactAi\reactAi\src\pages\Admin\components\feedBack\index.scss", "SCSS", 0, 0, 0, 0, 0, 1, 1
+"d:\university\毕业设计\reactAi\reactAi\src\pages\Admin\components\feedBack\index.tsx", "TypeScript JSX", 0, 104, 0, 0, 3, 11, 118
+"d:\university\毕业设计\reactAi\reactAi\src\pages\Admin\components\knowledgeManger\index.scss", "SCSS", 0, 0, 5, 0, 0, 1, 6
+"d:\university\毕业设计\reactAi\reactAi\src\pages\Admin\components\knowledgeManger\index.tsx", "TypeScript JSX", 0, 290, 0, 0, 12, 30, 332
+"d:\university\毕业设计\reactAi\reactAi\src\pages\Admin\components\logManger\index.scss", "SCSS", 0, 0, 0, 0, 0, 1, 1
+"d:\university\毕业设计\reactAi\reactAi\src\pages\Admin\components\logManger\index.tsx", "TypeScript JSX", 0, 8, 0, 0, 0, 4, 12
+"d:\university\毕业设计\reactAi\reactAi\src\pages\Admin\components\sider\index.scss", "SCSS", 0, 0, 17, 0, 0, 0, 17
+"d:\university\毕业设计\reactAi\reactAi\src\pages\Admin\components\sider\index.tsx", "TypeScript JSX", 0, 67, 0, 0, 2, 11, 80
+"d:\university\毕业设计\reactAi\reactAi\src\pages\Admin\components\userManger\index.scss", "SCSS", 0, 0, 5, 0, 0, 0, 5
+"d:\university\毕业设计\reactAi\reactAi\src\pages\Admin\components\userManger\index.tsx", "TypeScript JSX", 0, 129, 0, 0, 4, 15, 148
+"d:\university\毕业设计\reactAi\reactAi\src\pages\Admin\index.scss", "SCSS", 0, 0, 38, 0, 0, 6, 44
+"d:\university\毕业设计\reactAi\reactAi\src\pages\Admin\index.tsx", "TypeScript JSX", 0, 100, 0, 0, 1, 9, 110
+"d:\university\毕业设计\reactAi\reactAi\src\pages\Home\compents\chatWindow\hooks.tsx", "TypeScript JSX", 0, 21, 0, 0, 0, 5, 26
+"d:\university\毕业设计\reactAi\reactAi\src\pages\Home\compents\chatWindow\index.scss", "SCSS", 0, 0, 230, 0, 3, 9, 242
+"d:\university\毕业设计\reactAi\reactAi\src\pages\Home\compents\chatWindow\index.tsx", "TypeScript JSX", 0, 360, 0, 0, 11, 53, 424
+"d:\university\毕业设计\reactAi\reactAi\src\pages\Home\compents\conversationList\index.scss", "SCSS", 0, 0, 45, 0, 1, 5, 51
+"d:\university\毕业设计\reactAi\reactAi\src\pages\Home\compents\conversationList\index.tsx", "TypeScript JSX", 0, 194, 0, 0, 5, 20, 219
+"d:\university\毕业设计\reactAi\reactAi\src\pages\Home\compents\exam\index.scss", "SCSS", 0, 0, 47, 0, 1, 5, 53
+"d:\university\毕业设计\reactAi\reactAi\src\pages\Home\compents\exam\index.tsx", "TypeScript JSX", 0, 266, 0, 0, 4, 48, 318
+"d:\university\毕业设计\reactAi\reactAi\src\pages\Home\compents\exam\mock.ts", "TypeScript", 0, 0, 0, 0, 63, 1, 64
+"d:\university\毕业设计\reactAi\reactAi\src\pages\Home\compents\siderBar\index.scss", "SCSS", 0, 0, 46, 0, 1, 9, 56
+"d:\university\毕业设计\reactAi\reactAi\src\pages\Home\compents\siderBar\index.tsx", "TypeScript JSX", 0, 47, 0, 0, 0, 9, 56
+"d:\university\毕业设计\reactAi\reactAi\src\pages\Home\home.tsx", "TypeScript JSX", 0, 94, 0, 0, 2, 14, 110
+"d:\university\毕业设计\reactAi\reactAi\src\pages\Home\index.scss", "SCSS", 0, 0, 143, 0, 3, 6, 152
+"d:\university\毕业设计\reactAi\reactAi\src\pages\Home\index.tsx", "TypeScript JSX", 0, 152, 0, 0, 1, 33, 186
+"d:\university\毕业设计\reactAi\reactAi\src\pages\Login\login.scss", "SCSS", 0, 0, 115, 0, 1, 20, 136
+"d:\university\毕业设计\reactAi\reactAi\src\pages\Login\login.tsx", "TypeScript JSX", 0, 177, 0, 0, 0, 15, 192
+"d:\university\毕业设计\reactAi\reactAi\src\types\admin.ts", "TypeScript", 69, 0, 0, 0, 7, 8, 84
+"d:\university\毕业设计\reactAi\reactAi\src\types\chat.ts", "TypeScript", 47, 0, 0, 0, 0, 8, 55
+"d:\university\毕业设计\reactAi\reactAi\src\types\exam.ts", "TypeScript", 23, 0, 0, 0, 0, 3, 26
+"d:\university\毕业设计\reactAi\reactAi\src\types\feedback.ts", "TypeScript", 16, 0, 0, 0, 0, 1, 17
+"d:\university\毕业设计\reactAi\reactAi\src\types\utils.ts", "TypeScript", 4, 0, 0, 0, 0, 0, 4
+"d:\university\毕业设计\reactAi\reactAi\src\utils.ts", "TypeScript", 22, 0, 0, 0, 4, 6, 32
+"d:\university\毕业设计\reactAi\reactAi\src\vite-env.d.ts", "TypeScript", 0, 0, 0, 0, 1, 1, 2
+"Total", "-", 522, 3455, 960, 162, 175, 627, 5901

@@ -93,10 +93,12 @@ const AddKnowLedgeBases = () => {
                 clearFile();
 
             } else {
+                setSpinning(false);
                 message.error(res.msg || "更新失败");
             }
-        } catch {
-            message.error("表单字段未填写完全");
+        } catch (err) {
+
+            console.log(err);
 
             return;
         }
